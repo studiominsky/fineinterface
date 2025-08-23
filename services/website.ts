@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   query,
+  QueryConstraint,
   updateDoc,
   where,
 } from 'firebase/firestore';
@@ -23,7 +24,7 @@ export type WebsiteData = {
   url: string;
   category: 'tech' | 'ai' | 'marketing';
   description: string;
-  screenshotUrls?: string[];
+  screenshotUrl?: string; // Correct: singular string
   createdBy: string;
   approved?: boolean;
   createdAt: number;
@@ -33,36 +34,29 @@ export type WebsiteData = {
 
 const websitesRef = collection(db, 'websites');
 
-// Add a new website with images and an initial rating
 export const addWebsite = async (
   data: Omit<
     WebsiteData,
     | 'id'
-    | 'screenshotUrls'
+    | 'screenshotUrl'
     | 'ratings'
     | 'averageRating'
     | 'approved'
     | 'createdAt'
   >,
-  files: FileList,
+  file: File,
   initialRating: number
 ) => {
-  const screenshotUrls: string[] = [];
-  await Promise.all(
-    Array.from(files).map(async (file) => {
-      const storageRef = ref(
-        storage,
-        `websites/${data.createdBy}/${Date.now()}_${file.name}`
-      );
-      await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(storageRef);
-      screenshotUrls.push(downloadURL);
-    })
+  const storageRef = ref(
+    storage,
+    `websites/${data.createdBy}/${Date.now()}_${file.name}`
   );
+  await uploadBytes(storageRef, file);
+  const downloadURL = await getDownloadURL(storageRef);
 
   return await addDoc(websitesRef, {
     ...data,
-    screenshotUrls,
+    screenshotUrl: downloadURL,
     approved: false,
     ratings: { [data.createdBy]: initialRating },
     averageRating: initialRating,
@@ -70,18 +64,25 @@ export const addWebsite = async (
   });
 };
 
-// Get all approved websites
-export const getApprovedWebsites = async (): Promise<
-  WebsiteData[]
-> => {
-  const q = query(websitesRef, where('approved', '==', true));
+export const getApprovedWebsites = async (
+  category?: string
+): Promise<WebsiteData[]> => {
+  const queryConstraints: QueryConstraint[] = [
+    where('approved', '==', true),
+  ];
+
+  if (category && category !== 'all') {
+    queryConstraints.push(where('category', '==', category));
+  }
+
+  const q = query(collection(db, 'websites'), ...queryConstraints);
   const snapshot = await getDocs(q);
+
   return snapshot.docs.map(
     (doc) => ({ id: doc.id, ...doc.data() } as WebsiteData)
   );
 };
 
-// Get all unapproved websites for admin review
 export const getUnapprovedWebsites = async (): Promise<
   WebsiteData[]
 > => {
@@ -92,7 +93,6 @@ export const getUnapprovedWebsites = async (): Promise<
   );
 };
 
-// Get all websites submitted by a specific user
 export const getWebsitesByUser = async (
   userId: string
 ): Promise<WebsiteData[]> => {
@@ -103,29 +103,24 @@ export const getWebsitesByUser = async (
   );
 };
 
-// Approve a website
 export const approveWebsite = async (id: string) => {
   await updateDoc(doc(db, 'websites', id), {
     approved: true,
   });
 };
 
-// Delete a website and its associated images
 export const deleteWebsite = async (id: string) => {
   const websiteDoc = await getDoc(doc(db, 'websites', id));
   if (websiteDoc.exists()) {
     const websiteData = websiteDoc.data() as WebsiteData;
-    if (websiteData.screenshotUrls) {
-      for (const url of websiteData.screenshotUrls) {
-        const imageRef = ref(storage, url);
-        await deleteObject(imageRef);
-      }
+    if (websiteData.screenshotUrl) {
+      const imageRef = ref(storage, websiteData.screenshotUrl);
+      await deleteObject(imageRef);
     }
   }
   await deleteDoc(doc(db, 'websites', id));
 };
 
-// Rate a website
 export const rateWebsite = async (
   websiteId: string,
   userId: string,

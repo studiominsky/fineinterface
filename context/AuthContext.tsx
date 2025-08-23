@@ -4,7 +4,7 @@ import {
   onAuthStateChanged,
   signInWithPopup,
   GoogleAuthProvider,
-  GithubAuthProvider, // Import GithubAuthProvider
+  GithubAuthProvider,
   signOut,
   User,
 } from 'firebase/auth';
@@ -20,10 +20,12 @@ type AuthProviderType = 'google' | 'github';
 
 const AuthContext = createContext<{
   user: User | null;
-  signIn: (providerName: AuthProviderType) => Promise<void>; // Update signIn signature
+  loading: boolean;
+  signIn: (providerName: AuthProviderType) => Promise<void>;
   logout: () => void;
 }>({
   user: null,
+  loading: true,
   signIn: async () => {},
   logout: () => {},
 });
@@ -34,14 +36,17 @@ export const AuthProvider = ({
   children: React.ReactNode;
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, setUser);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
     return unsubscribe;
   }, []);
 
   const signIn = async (providerName: AuthProviderType) => {
-    // Select the provider based on the input string
     const provider =
       providerName === 'google'
         ? new GoogleAuthProvider()
@@ -59,7 +64,7 @@ export const AuthProvider = ({
   };
 
   return (
-    <AuthContext.Provider value={{ user, signIn, logout }}>
+    <AuthContext.Provider value={{ user, loading, signIn, logout }}>
       {children}
     </AuthContext.Provider>
   );

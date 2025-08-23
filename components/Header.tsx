@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
-import { SignInDialog } from './SignInDialog'; // Import the new dialog
+import { SignInDialog } from './SignInDialog';
+import Image from 'next/image';
 
 export const Header = () => {
   const { user, logout } = useAuth();
@@ -12,13 +13,21 @@ export const Header = () => {
   return (
     <header className="w-full flex justify-between items-center p-4 border-b">
       <Link href="/" className="text-xl font-medium">
-        Fine Interface
+        <Image
+          src={'./fineinterface-light.svg'}
+          alt="Logo"
+          width={210}
+          height={100}
+        />
       </Link>
 
       <div className="flex items-center gap-4">
         {user ? (
           <>
             <UploadWebsiteDialog />
+            <Link href="/profile">
+              <Button variant="ghost">Profile</Button>
+            </Link>
             <Button variant="ghost" onClick={logout}>
               Logout
             </Button>

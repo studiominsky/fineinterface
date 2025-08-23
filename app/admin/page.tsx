@@ -171,17 +171,17 @@ export default function AdminPage() {
               </div>
 
               <div className="flex flex-wrap gap-4 mt-4">
-                {website.screenshotUrls?.map((url, index) => (
-                  <Link key={index} href={url} target="_blank">
+                {website.screenshotUrl && (
+                  <Link href={website.screenshotUrl} target="_blank">
                     <Image
-                      src={url}
-                      alt={`${website.title} screenshot ${index + 1}`}
+                      src={website.screenshotUrl}
+                      alt={`${website.title} screenshot`}
                       width={200}
                       height={150}
                       className="rounded object-cover hover:opacity-80 transition-opacity"
                     />
                   </Link>
-                ))}
+                )}
               </div>
             </div>
           ))}
