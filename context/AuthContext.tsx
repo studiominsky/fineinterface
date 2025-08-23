@@ -4,6 +4,7 @@ import {
   onAuthStateChanged,
   signInWithPopup,
   GoogleAuthProvider,
+  GithubAuthProvider, // Import GithubAuthProvider
   signOut,
   User,
 } from 'firebase/auth';
@@ -15,13 +16,15 @@ import {
 } from 'react';
 import { auth } from '@/lib/firebase';
 
+type AuthProviderType = 'google' | 'github';
+
 const AuthContext = createContext<{
   user: User | null;
-  signIn: () => void;
+  signIn: (providerName: AuthProviderType) => Promise<void>; // Update signIn signature
   logout: () => void;
 }>({
   user: null,
-  signIn: () => {},
+  signIn: async () => {},
   logout: () => {},
 });
 
@@ -37,9 +40,18 @@ export const AuthProvider = ({
     return unsubscribe;
   }, []);
 
-  const signIn = async () => {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+  const signIn = async (providerName: AuthProviderType) => {
+    // Select the provider based on the input string
+    const provider =
+      providerName === 'google'
+        ? new GoogleAuthProvider()
+        : new GithubAuthProvider();
+
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error('Authentication failed:', error);
+    }
   };
 
   const logout = async () => {
