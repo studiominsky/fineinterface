@@ -15,12 +15,21 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/context/AuthContext';
-import { addWebsite, WebsiteData } from '@/services/website';
+import { addWebsite, categorySlugs } from '@/services/website';
 import { toast } from 'sonner';
 import { Spinner } from './ui/spinner';
 
-const availableCategories = ['tech', 'ai', 'marketing'] as const;
+// Use the single source of truth for categories
+const availableCategories = categorySlugs;
 type Category = (typeof availableCategories)[number];
+
+// Helper to make category slugs look nice
+const formatCategoryLabel = (slug: string) => {
+  return slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
 
 export const UploadWebsiteDialog = () => {
   const { user } = useAuth();
@@ -46,7 +55,7 @@ export const UploadWebsiteDialog = () => {
     e.preventDefault();
     if (!user || !file || categories.length === 0) {
       toast.error(
-        'Please fill out all fields and select an image and category.'
+        'Please fill out all fields, select at least one category, and upload a screenshot.'
       );
       return;
     }
@@ -65,9 +74,14 @@ export const UploadWebsiteDialog = () => {
 
       toast.dismiss();
       toast.success('Website submitted for approval!');
+      // Reset form state
       setForm({ title: '', url: '', description: '' });
       setCategories([]);
       setFile(null);
+      const fileInput = document.getElementById(
+        'photo'
+      ) as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
       setOpen(false);
     } catch (err) {
       toast.dismiss();
@@ -83,7 +97,7 @@ export const UploadWebsiteDialog = () => {
       <DialogTrigger asChild>
         <Button>Upload Website</Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] max-w-4xl border overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Submit a Website for Review</DialogTitle>
         </DialogHeader>
@@ -104,6 +118,7 @@ export const UploadWebsiteDialog = () => {
             <Input
               id="url"
               type="url"
+              placeholder="https://example.com"
               value={form.url}
               onChange={(e) =>
                 setForm({ ...form, url: e.target.value })
@@ -111,9 +126,9 @@ export const UploadWebsiteDialog = () => {
               required
             />
           </div>
-          <div className="space-y-1">
-            <Label>Categories</Label>
-            <div className="flex flex-wrap gap-4 pt-2">
+          <div className="space-y-2">
+            <Label>Categories (select at least one)</Label>
+            <div className="flex flex-wrap gap-x-4 gap-y-2 pt-2">
               {availableCategories.map((category) => (
                 <div
                   key={category}
@@ -126,11 +141,8 @@ export const UploadWebsiteDialog = () => {
                       handleCategoryChange(category)
                     }
                   />
-                  <Label
-                    htmlFor={category}
-                    className="font-normal capitalize"
-                  >
-                    {category}
+                  <Label htmlFor={category} className="font-normal">
+                    {formatCategoryLabel(category)}
                   </Label>
                 </div>
               ))}
@@ -149,11 +161,11 @@ export const UploadWebsiteDialog = () => {
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="photo">Photo</Label>
+            <Label htmlFor="photo">Screenshot</Label>
             <Input
               id="photo"
               type="file"
-              accept="image/*"
+              accept="image/png, image/jpeg, image/webp"
               onChange={(e) =>
                 setFile(e.target.files ? e.target.files[0] : null)
               }
@@ -165,7 +177,7 @@ export const UploadWebsiteDialog = () => {
               {isSubmitting ? (
                 <Spinner className="mr-2 h-4 w-4" />
               ) : null}
-              {isSubmitting ? 'Submitting...' : 'Submit'}
+              {isSubmitting ? 'Submitting...' : 'Submit for Review'}
             </Button>
           </DialogFooter>
         </form>

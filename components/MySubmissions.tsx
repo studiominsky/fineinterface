@@ -24,7 +24,7 @@ export function MySubmissions() {
   }, [user]);
 
   return (
-    <div className="p-6 border rounded-lg bg-card text-card-foreground shadow-sm">
+    <div className="p-6 border rounded-lg text-card-foreground">
       <h2 className="text-xl font-semibold mb-4">My Submissions</h2>
       {loading ? (
         <p>Loading your submissions...</p>

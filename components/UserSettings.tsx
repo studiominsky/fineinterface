@@ -1,72 +1,48 @@
 'use client';
 
+import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { deleteUser } from 'firebase/auth';
 import {
-  reauthenticateWithCredential,
-  EmailAuthProvider,
-  updatePassword,
-  deleteUser,
-} from 'firebase/auth';
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { toast } from 'sonner';
+import { Spinner } from '@/components/ui/spinner';
 
 export function UserSettings() {
   const { user, logout } = useAuth();
-
-  const handleChangePassword = async () => {
-    if (!user?.email) {
-      alert('Cannot change password for accounts without an email.');
-      return;
-    }
-
-    const oldPassword = prompt(
-      'Please enter your current password to continue:'
-    );
-    if (!oldPassword) return;
-
-    const credential = EmailAuthProvider.credential(
-      user.email,
-      oldPassword
-    );
-
-    try {
-      await reauthenticateWithCredential(user, credential);
-      const newPassword = prompt('Please enter your new password:');
-      if (newPassword) {
-        await updatePassword(user, newPassword);
-        alert('Password updated successfully!');
-      }
-    } catch (error) {
-      console.error('Error changing password:', error);
-      alert(
-        'Failed to change password. Please check your current password and try again.'
-      );
-    }
-  };
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeleteProfile = async () => {
-    if (
-      window.confirm(
-        'Are you absolutely sure? This will permanently delete your account and all your data.'
-      )
-    ) {
-      if (!user) return;
-      try {
-        await deleteUser(user);
-        alert('Your profile has been deleted.');
-        await logout();
-      } catch (error) {
-        console.error('Error deleting profile:', error);
-        alert(
-          'Failed to delete profile. You may need to sign in again to perform this action.'
-        );
-      }
+    if (!user) return;
+    setIsDeleting(true);
+    try {
+      await deleteUser(user);
+      toast.success('Your profile has been deleted.');
+      await logout();
+    } catch (error) {
+      console.error('Error deleting profile:', error);
+      toast.error(
+        'Failed to delete profile. You may need to sign in again to perform this action.'
+      );
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   if (!user) return null;
 
   return (
-    <div className="p-6 border rounded-lg bg-card text-card-foreground shadow-sm sticky top-24">
+    <div className="p-6 border rounded-lg text-card-foreground sticky top-24">
       <h2 className="text-xl font-semibold mb-4">Settings</h2>
       <div className="space-y-4">
         <div>
@@ -80,16 +56,38 @@ export function UserSettings() {
           </p>
         </div>
         <div className="flex flex-col space-y-2 pt-2">
-          <Button
-            onClick={handleChangePassword}
-            variant="outline"
-            disabled={!user.email}
-          >
-            Change Password
-          </Button>
-          <Button onClick={handleDeleteProfile} variant="destructive">
-            Delete Profile
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive">Delete Profile</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Are you absolutely sure?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently
+                  delete your account and remove all your submitted
+                  data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  disabled={isDeleting}
+                  onClick={handleDeleteProfile}
+                  className={buttonVariants({
+                    variant: 'destructive',
+                  })}
+                >
+                  {isDeleting && <Spinner className="mr-2 h-4 w-4" />}
+                  {isDeleting
+                    ? 'Deleting...'
+                    : 'Yes, delete my account'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
     </div>
