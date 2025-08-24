@@ -9,6 +9,8 @@ import {
   updateDoc,
   arrayUnion,
   getDoc,
+  deleteDoc,
+  arrayRemove, // <-- Import added here
 } from 'firebase/firestore';
 import { WebsiteData } from './website';
 
@@ -22,11 +24,12 @@ export type Folder = {
 const foldersRef = collection(db, 'folders');
 
 export const createFolder = async (name: string, userId: string) => {
-  return await addDoc(foldersRef, {
+  const docRef = await addDoc(foldersRef, {
     name,
     createdBy: userId,
     websiteIds: [],
   });
+  return docRef.id;
 };
 
 export const getFoldersByUser = async (
@@ -49,6 +52,11 @@ export const addWebsiteToFolder = async (
   });
 };
 
+export const deleteFolder = async (folderId: string) => {
+  const folderRef = doc(db, 'folders', folderId);
+  return await deleteDoc(folderRef);
+};
+
 export const getWebsitesInFolder = async (
   folder: Folder
 ): Promise<WebsiteData[]> => {
@@ -64,4 +72,14 @@ export const getWebsitesInFolder = async (
   return websiteDocs
     .filter((doc) => doc.exists())
     .map((doc) => ({ id: doc.id, ...doc.data() } as WebsiteData));
+};
+
+export const removeWebsiteFromFolder = async (
+  folderId: string,
+  websiteId: string
+) => {
+  const folderRef = doc(db, 'folders', folderId);
+  return await updateDoc(folderRef, {
+    websiteIds: arrayRemove(websiteId),
+  });
 };

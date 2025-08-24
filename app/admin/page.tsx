@@ -136,7 +136,7 @@ export default function AdminPage() {
           {websites.map((website) => (
             <div
               key={website.id}
-              className="border bg-card text-card-foreground p-4 rounded-lg shadow-sm transition-all"
+              className="border text-card-foreground p-4 rounded-lg shadow-sm transition-all"
             >
               <div className="flex flex-col md:flex-row md:justify-between md:items-start">
                 <div>

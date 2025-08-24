@@ -7,23 +7,36 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription, // <-- Import added
   DialogFooter,
 } from '@/components/ui/dialog';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/context/AuthContext';
 import { addWebsite, categorySlugs } from '@/services/website';
 import { toast } from 'sonner';
 import { Spinner } from './ui/spinner';
+import { Check, ChevronsUpDown } from 'lucide-react';
 
-// Use the single source of truth for categories
 const availableCategories = categorySlugs;
 type Category = (typeof availableCategories)[number];
 
-// Helper to make category slugs look nice
 const formatCategoryLabel = (slug: string) => {
   return slug
     .split('-')
@@ -74,7 +87,6 @@ export const UploadWebsiteDialog = () => {
 
       toast.dismiss();
       toast.success('Website submitted for approval!');
-      // Reset form state
       setForm({ title: '', url: '', description: '' });
       setCategories([]);
       setFile(null);
@@ -97,9 +109,13 @@ export const UploadWebsiteDialog = () => {
       <DialogTrigger asChild>
         <Button>Upload Website</Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] max-w-4xl border overflow-y-auto">
+      <DialogContent className="max-h-[90vh] overflow-y-auto max-w-150">
         <DialogHeader>
           <DialogTitle>Submit a Website for Review</DialogTitle>
+          <DialogDescription>
+            Your submission will be reviewed by an administrator
+            before it appears on the site.
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-1">
@@ -126,28 +142,67 @@ export const UploadWebsiteDialog = () => {
               required
             />
           </div>
+
           <div className="space-y-2">
             <Label>Categories (select at least one)</Label>
-            <div className="flex flex-wrap gap-x-4 gap-y-2 pt-2">
-              {availableCategories.map((category) => (
-                <div
-                  key={category}
-                  className="flex items-center space-x-2"
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  className="w-full justify-between h-auto font-normal"
                 >
-                  <Checkbox
-                    id={category}
-                    checked={categories.includes(category)}
-                    onCheckedChange={() =>
-                      handleCategoryChange(category)
-                    }
-                  />
-                  <Label htmlFor={category} className="font-normal">
-                    {formatCategoryLabel(category)}
-                  </Label>
-                </div>
-              ))}
-            </div>
+                  <div className="flex gap-1 flex-wrap">
+                    {categories.length > 0 ? (
+                      <>
+                        {categories.slice(0, 4).map((cat) => (
+                          <Badge key={cat} variant="secondary">
+                            {formatCategoryLabel(cat)}
+                          </Badge>
+                        ))}
+                        {categories.length > 4 && (
+                          <Badge variant="outline">
+                            +{categories.length - 4} more
+                          </Badge>
+                        )}
+                      </>
+                    ) : (
+                      'Select categories...'
+                    )}
+                  </div>
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                <Command>
+                  <CommandInput placeholder="Search categories..." />
+                  <CommandList>
+                    <CommandEmpty>No category found.</CommandEmpty>
+                    <CommandGroup>
+                      {availableCategories.map((category) => (
+                        <CommandItem
+                          key={category}
+                          onSelect={() =>
+                            handleCategoryChange(category)
+                          }
+                        >
+                          <Check
+                            className={`mr-2 h-4 w-4 ${
+                              categories.includes(category)
+                                ? 'opacity-100'
+                                : 'opacity-0'
+                            }`}
+                          />
+                          {formatCategoryLabel(category)}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
+
           <div className="space-y-1">
             <Label htmlFor="description">Description</Label>
             <Textarea

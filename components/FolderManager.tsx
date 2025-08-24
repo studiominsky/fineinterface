@@ -2,23 +2,44 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Folder as FolderIcon,
   PlusCircle,
   FolderArchive,
+  Trash2,
+  MoreVertical,
 } from 'lucide-react';
 import {
   Folder,
   createFolder,
+  deleteFolder,
   getFoldersByUser,
   getWebsitesInFolder,
+  removeWebsiteFromFolder,
 } from '@/services/folders';
 import { WebsiteData } from '@/services/website';
 import { WebsitesGrid } from './WebsitesGrid';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { toast } from 'sonner';
 
 export function FolderManager() {
   const { user } = useAuth();
@@ -33,29 +54,52 @@ export function FolderManager() {
   const [isCreating, setIsCreating] = useState(false);
   const [foldersLoading, setFoldersLoading] = useState(true);
   const [websitesLoading, setWebsitesLoading] = useState(false);
+  const [folderToDelete, setFolderToDelete] = useState<Folder | null>(
+    null
+  );
 
-  const fetchFolders = async () => {
+  const fetchFolders = async (selectFolderId?: string) => {
     if (!user) return;
     setFoldersLoading(true);
     const userFolders = await getFoldersByUser(user.uid);
     setFolders(userFolders);
     setFoldersLoading(false);
+
+    if (selectFolderId) {
+      const newFolder = userFolders.find(
+        (f) => f.id === selectFolderId
+      );
+      if (newFolder) handleSelectFolder(newFolder);
+    }
   };
 
   useEffect(() => {
-    if (user) {
-      fetchFolders();
-    }
+    if (user) fetchFolders();
   }, [user]);
 
   const handleCreateFolder = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !newFolderName.trim()) return;
     setIsCreating(true);
-    await createFolder(newFolderName, user.uid);
+    const newFolderId = await createFolder(newFolderName, user.uid);
     setNewFolderName('');
-    await fetchFolders();
+    toast.success(`Folder "${newFolderName}" created.`);
+    await fetchFolders(newFolderId);
     setIsCreating(false);
+  };
+
+  const handleDeleteFolder = async (folderId: string) => {
+    try {
+      await deleteFolder(folderId);
+      toast.success('Folder deleted.');
+      if (selectedFolder?.id === folderId) {
+        setSelectedFolder(null);
+        setWebsitesInFolder([]);
+      }
+      fetchFolders();
+    } catch (error) {
+      toast.error('Failed to delete folder.');
+    }
   };
 
   const handleSelectFolder = async (folder: Folder) => {
@@ -66,13 +110,47 @@ export function FolderManager() {
     setWebsitesLoading(false);
   };
 
+  const handleRemoveWebsite = async (websiteId: string) => {
+    if (!selectedFolder) return;
+
+    const originalWebsitesInFolder = [...websitesInFolder];
+    const originalFolders = [...folders];
+
+    setWebsitesInFolder((prev) =>
+      prev.filter((web) => web.id !== websiteId)
+    );
+
+    setFolders((prevFolders) =>
+      prevFolders.map((f) =>
+        f.id === selectedFolder.id
+          ? {
+              ...f,
+              websiteIds: f.websiteIds.filter(
+                (id) => id !== websiteId
+              ),
+            }
+          : f
+      )
+    );
+
+    try {
+      await removeWebsiteFromFolder(selectedFolder.id, websiteId);
+      toast.success('Website removed from folder.');
+    } catch (error) {
+      toast.error('Failed to remove website. Please try again.');
+      setWebsitesInFolder(originalWebsitesInFolder);
+      setFolders(originalFolders);
+      console.error('Error removing website from folder:', error);
+    }
+  };
+
   return (
     <div className="grid md:grid-cols-[280px_1fr] gap-8">
       <aside className="p-6 border rounded-lg text-card-foreground">
         <h2 className="text-xl font-semibold mb-4">My Folders</h2>
         <form
           onSubmit={handleCreateFolder}
-          className="flex gap-2 mb-4 items-center"
+          className="flex gap-2 mb-4"
         >
           <Input
             value={newFolderName}
@@ -83,6 +161,7 @@ export function FolderManager() {
           />
           <Button
             type="submit"
+            size="icon"
             disabled={isCreating || !newFolderName.trim()}
           >
             {isCreating ? (
@@ -99,35 +178,58 @@ export function FolderManager() {
                 <Skeleton key={i} className="h-9 w-full rounded-md" />
               ))
             : folders.map((folder) => (
-                <Button
+                <div
                   key={folder.id}
-                  variant={
-                    selectedFolder?.id === folder.id
-                      ? 'secondary'
-                      : 'ghost'
-                  }
-                  onClick={() => handleSelectFolder(folder)}
-                  className="justify-start"
+                  className="flex items-center group gap-1"
                 >
-                  <FolderIcon className="mr-2 h-4 w-4" />
-                  <span className="truncate">{folder.name}</span>
-                </Button>
+                  <Button
+                    variant={
+                      selectedFolder?.id === folder.id
+                        ? 'secondary'
+                        : 'ghost'
+                    }
+                    onClick={() => handleSelectFolder(folder)}
+                    className="justify-start flex-grow w-0"
+                  >
+                    <FolderIcon className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="truncate">{folder.name}</span>
+                  </Button>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="shrink-0"
+                      >
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                        onSelect={() => setFolderToDelete(folder)}
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        <span>Remove</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               ))}
         </div>
       </aside>
 
-      {/* --- Content Area --- */}
-      <main>
+      <main className="p-6 border rounded-lg text-card-foreground">
         {!selectedFolder ? (
-          <div className="flex flex-col items-center justify-center h-full text-center p-6 border rounded-lg bg-card text-card-foreground">
+          <div className="flex flex-col items-center justify-center h-full text-center">
             <FolderIcon
               size={48}
               className="text-muted-foreground mb-4"
             />
             <h3 className="text-lg font-semibold">Select a folder</h3>
             <p className="text-muted-foreground mt-1">
-              Choose a folder from the list to see the websites
-              you&apos;ve saved.
+              Choose a folder to see the websites you&apos;ve saved.
             </p>
           </div>
         ) : (
@@ -145,7 +247,10 @@ export function FolderManager() {
                 ))}
               </div>
             ) : websitesInFolder.length > 0 ? (
-              <WebsitesGrid websites={websitesInFolder} />
+              <WebsitesGrid
+                websites={websitesInFolder}
+                onRemoveWebsite={handleRemoveWebsite}
+              />
             ) : (
               <div className="text-center py-12">
                 <FolderArchive
@@ -164,6 +269,36 @@ export function FolderManager() {
           </div>
         )}
       </main>
+
+      <AlertDialog
+        open={!!folderToDelete}
+        onOpenChange={(isOpen) => !isOpen && setFolderToDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Delete &quot;{folderToDelete?.name}&quot;?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. All websites saved in this
+              folder will be un-saved from it.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (folderToDelete) {
+                  handleDeleteFolder(folderToDelete.id);
+                }
+              }}
+              className={buttonVariants({ variant: 'destructive' })}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -1,24 +1,68 @@
 'use client';
 
 import Image from 'next/image';
-import { ExternalLink, ImageIcon } from 'lucide-react';
+import {
+  ExternalLink,
+  ImageIcon,
+  MoreVertical,
+  Trash2,
+} from 'lucide-react';
 import { WebsiteData } from '@/services/website';
 import { WebsiteDetailDialog } from './WebsiteDetailDialog';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export const WebsitesGrid = ({
   websites,
+  onRemoveWebsite,
 }: {
   websites: WebsiteData[];
+  onRemoveWebsite?: (websiteId: string) => void;
 }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-7">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {websites.map((site) => (
-        <div key={site.id} className="website-card h-full">
+        <div
+          key={site.id}
+          className="website-card h-full relative group"
+        >
+          {onRemoveWebsite && (
+            <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="h-7 w-7"
+                  >
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      onRemoveWebsite(site.id);
+                    }}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Remove from folder
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
+
           <WebsiteDetailDialog website={site}>
-            <div className="overflow-hidden rounded-md border transition-all flex flex-col group cursor-pointer h-full">
+            <div className="overflow-hidden transition-all flex flex-col cursor-pointer h-full">
               {site.screenshotUrl ? (
-                <div className="relative w-full aspect-video ">
+                <div className="relative w-full aspect-video">
                   <Image
                     src={site.screenshotUrl}
                     alt={site.title}
