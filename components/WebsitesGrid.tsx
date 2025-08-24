@@ -1,9 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { ImageIcon } from 'lucide-react';
+import { ExternalLink, ImageIcon } from 'lucide-react';
 import { WebsiteData } from '@/services/website';
 import { WebsiteDetailDialog } from './WebsiteDetailDialog';
+import { Button } from '@/components/ui/button';
 
 export const WebsitesGrid = ({
   websites,
@@ -11,13 +12,13 @@ export const WebsitesGrid = ({
   websites: WebsiteData[];
 }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-7">
       {websites.map((site) => (
         <div key={site.id} className="website-card h-full">
           <WebsiteDetailDialog website={site}>
-            <div className="border rounded-sm overflow-hidden transition-all flex flex-col group cursor-pointer h-full">
+            <div className="overflow-hidden rounded-md border transition-all flex flex-col group cursor-pointer h-full">
               {site.screenshotUrl ? (
-                <div className="relative w-full aspect-video">
+                <div className="relative w-full aspect-video ">
                   <Image
                     src={site.screenshotUrl}
                     alt={site.title}
@@ -34,10 +35,25 @@ export const WebsitesGrid = ({
                   />
                 </div>
               )}
-              <div className="p-4">
+              <div className="p-4 flex items-center justify-between gap-2">
                 <h3 className="font-semibold text-sm truncate">
                   {site.title}
                 </h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  asChild
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <a
+                    href={site.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visit ${site.title} website`}
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                </Button>
               </div>
             </div>
           </WebsiteDetailDialog>

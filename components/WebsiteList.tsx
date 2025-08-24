@@ -81,6 +81,22 @@ export function WebsiteList() {
 
   return (
     <div ref={container}>
+      <section className="px-7 py-12">
+        <div className="grid md:grid-cols-1 gap-12 items-center justify-between max-w-180">
+          <div className="text-center md:text-left">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              Fine Interface
+            </h1>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Find the best and most beautiful website designs on the
+              web. A curated collection for your inspiration.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <hr className="mb-4" />
+
       <WebsitesGrid websites={websites} />
     </div>
   );

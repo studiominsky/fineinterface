@@ -18,7 +18,7 @@ import {
 } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 
-const categorySlugs = [
+export const categorySlugs = [
   'portfolio',
   'assets',
   'agency',
