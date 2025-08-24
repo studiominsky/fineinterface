@@ -25,7 +25,7 @@ export const WebsitesGrid = ({
   onRemoveWebsite?: (websiteId: string) => void;
 }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-7">
       {websites.map((site) => (
         <div
           key={site.id}
@@ -60,15 +60,15 @@ export const WebsitesGrid = ({
           )}
 
           <WebsiteDetailDialog website={site}>
-            <div className="overflow-hidden transition-all flex flex-col cursor-pointer h-full">
+            <div className="overflow-hidden transition-all flex flex-col cursor-pointer h-full border border-border rounded-md duration-300 hover:-translate-y-2">
               {site.screenshotUrl ? (
-                <div className="relative w-full aspect-video">
+                <div className="relative w-full aspect-video ">
                   <Image
                     src={site.screenshotUrl}
                     alt={site.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="object-cover"
                   />
                 </div>
               ) : (

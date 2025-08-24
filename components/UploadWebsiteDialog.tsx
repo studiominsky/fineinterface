@@ -7,7 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription, // <-- Import added
+  DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
 import {
@@ -32,7 +32,7 @@ import { useAuth } from '@/context/AuthContext';
 import { addWebsite, categorySlugs } from '@/services/website';
 import { toast } from 'sonner';
 import { Spinner } from './ui/spinner';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { Check, ChevronsUpDown, PlusCircle } from 'lucide-react';
 
 const availableCategories = categorySlugs;
 type Category = (typeof availableCategories)[number];
@@ -107,7 +107,9 @@ export const UploadWebsiteDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Upload Website</Button>
+        <Button className="bg-[#a4ca0a] text-black hover:bg-[#8bb108]">
+          <PlusCircle className="h-4 w-4" /> Upload Website
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto max-w-150">
         <DialogHeader>
@@ -216,7 +218,7 @@ export const UploadWebsiteDialog = () => {
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="photo">Screenshot</Label>
+            <Label htmlFor="photo">Screenshot</Label>.
             <Input
               id="photo"
               type="file"
