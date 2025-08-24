@@ -18,11 +18,31 @@ import {
 } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 
+const categorySlugs = [
+  'portfolio',
+  'assets',
+  'agency',
+  'ai',
+  'tech',
+  'web3',
+  'dev-tools',
+  'design-tools',
+  'marketing',
+  'finance',
+  'ecommerce',
+  'mobile-apps',
+  'web-apps',
+  'desktop-apps',
+  'productivity',
+] as const;
+
+type Category = (typeof categorySlugs)[number];
+
 export type WebsiteData = {
   id: string;
   title: string;
   url: string;
-  categories: ('tech' | 'ai' | 'marketing')[];
+  categories: Category[];
   description: string;
   screenshotUrl?: string;
   createdBy: string;

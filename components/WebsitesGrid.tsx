@@ -15,7 +15,7 @@ export const WebsitesGrid = ({
       {websites.map((site) => (
         <div key={site.id} className="website-card h-full">
           <WebsiteDetailDialog website={site}>
-            <div className="border bg-card rounded-sm overflow-hidden transition-all flex flex-col group cursor-pointer h-full">
+            <div className="border rounded-sm overflow-hidden transition-all flex flex-col group cursor-pointer h-full">
               {site.screenshotUrl ? (
                 <div className="relative w-full aspect-video">
                   <Image
@@ -35,7 +35,7 @@ export const WebsitesGrid = ({
                 </div>
               )}
               <div className="p-4">
-                <h3 className="font-semibold text-lg truncate">
+                <h3 className="font-semibold text-sm truncate">
                   {site.title}
                 </h3>
               </div>

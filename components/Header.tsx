@@ -13,13 +13,8 @@ export const Header = () => {
 
   return (
     <header className="w-full flex justify-between items-center p-4 border-b">
-      <Link href="/" className="text-xl font-medium">
-        <Image
-          src={'/fineinterface-light.svg'}
-          alt="Logo"
-          width={210}
-          height={100}
-        />
+      <Link href="/" className="text-xl font-medium ">
+        <Image src={'/logo.svg'} alt="Logo" width={50} height={50} />
       </Link>
 
       <div className="flex items-center gap-2">
