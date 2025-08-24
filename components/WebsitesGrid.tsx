@@ -11,13 +11,13 @@ export const WebsitesGrid = ({
   websites: WebsiteData[];
 }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
       {websites.map((site) => (
         <div key={site.id} className="website-card">
           <WebsiteDetailDialog website={site}>
             <div className="border bg-card rounded-sm overflow-hidden transition-all flex flex-col group cursor-pointer h-full">
               {site.screenshotUrl ? (
-                <div className="relative w-full h-48 overflow-hidden">
+                <div className="relative w-full h-64 overflow-hidden">
                   <Image
                     src={site.screenshotUrl}
                     alt={site.title}

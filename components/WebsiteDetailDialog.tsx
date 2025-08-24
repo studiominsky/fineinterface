@@ -47,7 +47,7 @@ export function WebsiteDetailDialog({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-5xl p-0">
         <div className="grid md:grid-cols-2">
-          <div className="relative h-64 md:h-full md:rounded-l-lg overflow-hidden">
+          <div className="relative h-[500px] md:min-h-full md:rounded-l-lg overflow-hidden">
             {website.screenshotUrl ? (
               <Image
                 src={website.screenshotUrl}
@@ -97,7 +97,7 @@ export function WebsiteDetailDialog({
                 </span>
               </div>
 
-              <DialogDescription className="pt-4 text-left text-base">
+              <DialogDescription className="pt-4 text-left text-base max-h-40 overflow-y-auto">
                 {website.description}
               </DialogDescription>
             </div>

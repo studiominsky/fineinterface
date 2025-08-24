@@ -61,7 +61,7 @@ export function WebsiteList() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-90">
         <Spinner className="h-8 w-8" />
       </div>
     );
