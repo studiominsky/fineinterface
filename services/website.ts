@@ -44,8 +44,7 @@ export const addWebsite = async (
     | 'approved'
     | 'createdAt'
   >,
-  file: File,
-  initialRating: number
+  file: File
 ) => {
   const storageRef = ref(
     storage,
@@ -58,8 +57,8 @@ export const addWebsite = async (
     ...data,
     screenshotUrl: downloadURL,
     approved: false,
-    ratings: { [data.createdBy]: initialRating },
-    averageRating: initialRating,
+    ratings: {},
+    averageRating: 0,
     createdAt: Date.now(),
   });
 };

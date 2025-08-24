@@ -8,6 +8,7 @@ import {
   signOut,
   User,
 } from 'firebase/auth';
+import { FirebaseError } from 'firebase/app';
 import {
   createContext,
   useContext,
@@ -15,6 +16,7 @@ import {
   useState,
 } from 'react';
 import { auth } from '@/lib/firebase';
+import { toast } from 'sonner';
 
 type AuthProviderType = 'google' | 'github';
 
@@ -52,15 +54,33 @@ export const AuthProvider = ({
         ? new GoogleAuthProvider()
         : new GithubAuthProvider();
 
+    toast.loading(`Signing in with ${providerName}...`);
     try {
       await signInWithPopup(auth, provider);
+      toast.dismiss();
+      toast.success('Successfully signed in!');
     } catch (error) {
+      toast.dismiss();
+      if (error instanceof FirebaseError) {
+        toast.error(`Authentication failed: ${error.message}`);
+      } else {
+        toast.error('An unknown authentication error occurred.');
+      }
       console.error('Authentication failed:', error);
     }
   };
 
   const logout = async () => {
-    await signOut(auth);
+    try {
+      await signOut(auth);
+      toast.success('Successfully signed out!');
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        toast.error(`Sign out failed: ${error.message}`);
+      } else {
+        toast.error('An unknown error occurred during sign out.');
+      }
+    }
   };
 
   return (
