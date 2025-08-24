@@ -9,6 +9,7 @@ import {
   WebsiteData,
 } from '@/services/website';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -150,9 +151,17 @@ export default function AdminPage() {
                   >
                     {website.url}
                   </Link>
-                  <p className="text-sm text-muted-foreground capitalize mt-1">
-                    Category: {website.category}
-                  </p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {website.categories.map((category) => (
+                      <Badge
+                        key={category}
+                        variant="secondary"
+                        className="capitalize"
+                      >
+                        {category}
+                      </Badge>
+                    ))}
+                  </div>
                   <p className="mt-2 text-base">
                     {website.description}
                   </p>

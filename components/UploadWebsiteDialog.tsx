@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   Dialog,
   DialogTrigger,
@@ -12,17 +13,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '@/components/ui/select';
-import { useState } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/context/AuthContext';
 import { addWebsite, WebsiteData } from '@/services/website';
 import { Star } from 'lucide-react';
+
+const availableCategories = ['tech', 'ai', 'marketing'] as const;
+type Category = (typeof availableCategories)[number];
 
 export const UploadWebsiteDialog = () => {
   const { user } = useAuth();
@@ -30,9 +27,9 @@ export const UploadWebsiteDialog = () => {
   const [form, setForm] = useState({
     title: '',
     url: '',
-    category: '',
     description: '',
   });
+  const [categories, setCategories] = useState<Category[]>([]);
   const [rating, setRating] = useState(0);
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,34 +38,37 @@ export const UploadWebsiteDialog = () => {
     setRating(rate);
   };
 
+  const handleCategoryChange = (category: Category) => {
+    setCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !file || !form.category || rating === 0) {
+    if (!user || !file || categories.length === 0 || rating === 0) {
       alert(
-        'Please fill out all fields, provide a rating, and select an image.'
+        'Please fill out all fields, provide a rating, select an image, and choose at least one category.'
       );
       return;
     }
     setIsSubmitting(true);
 
     try {
-      const websiteData: Omit<
-        WebsiteData,
-        | 'id'
-        | 'screenshotUrl'
-        | 'ratings'
-        | 'averageRating'
-        | 'approved'
-        | 'createdAt'
-      > = {
-        ...form,
-        category: form.category as 'tech' | 'ai' | 'marketing',
-        createdBy: user.uid,
-      };
+      await addWebsite(
+        {
+          ...form,
+          categories,
+          createdBy: user.uid,
+        },
+        file,
+        rating
+      );
 
-      await addWebsite(websiteData, file, rating);
-
-      setForm({ title: '', url: '', category: '', description: '' });
+      setForm({ title: '', url: '', description: '' });
+      setCategories([]);
       setRating(0);
       setFile(null);
       setOpen(false);
@@ -87,14 +87,11 @@ export const UploadWebsiteDialog = () => {
       <DialogTrigger asChild>
         <Button>Upload Website</Button>
       </DialogTrigger>
-
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Submit a Website for Review</DialogTitle>
         </DialogHeader>
-
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          {/* Title, URL, Category, Description inputs remain the same... */}
           <div className="space-y-1">
             <Label htmlFor="title">Title</Label>
             <Input
@@ -106,7 +103,6 @@ export const UploadWebsiteDialog = () => {
               required
             />
           </div>
-
           <div className="space-y-1">
             <Label htmlFor="url">URL</Label>
             <Input
@@ -119,27 +115,31 @@ export const UploadWebsiteDialog = () => {
               required
             />
           </div>
-
           <div className="space-y-1">
-            <Label htmlFor="category">Category</Label>
-            <Select
-              onValueChange={(value) =>
-                setForm({ ...form, category: value })
-              }
-              required
-              value={form.category}
-            >
-              <SelectTrigger id="category">
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="tech">Tech</SelectItem>
-                <SelectItem value="ai">AI</SelectItem>
-                <SelectItem value="marketing">Marketing</SelectItem>
-              </SelectContent>
-            </Select>
+            <Label>Categories</Label>
+            <div className="flex flex-wrap gap-4 pt-2">
+              {availableCategories.map((category) => (
+                <div
+                  key={category}
+                  className="flex items-center space-x-2"
+                >
+                  <Checkbox
+                    id={category}
+                    checked={categories.includes(category)}
+                    onCheckedChange={() =>
+                      handleCategoryChange(category)
+                    }
+                  />
+                  <Label
+                    htmlFor={category}
+                    className="font-normal capitalize"
+                  >
+                    {category}
+                  </Label>
+                </div>
+              ))}
+            </div>
           </div>
-
           <div className="space-y-1">
             <Label htmlFor="description">Description</Label>
             <Textarea
@@ -152,7 +152,6 @@ export const UploadWebsiteDialog = () => {
               required
             />
           </div>
-
           <div className="space-y-1">
             <Label>Your Rating</Label>
             <div className="flex items-center">
@@ -181,7 +180,6 @@ export const UploadWebsiteDialog = () => {
               required
             />
           </div>
-
           <DialogFooter>
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Submitting...' : 'Submit'}

@@ -8,20 +8,24 @@ const categories = ['all', 'tech', 'ai', 'marketing'];
 export const CategorySidebar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const active = searchParams.get('category') || 'all';
+  const activeCategory = searchParams.get('category') || 'all';
 
   return (
     <aside className="p-4 w-48 border-r space-y-2">
-      {categories.map((cat) => (
+      {categories.map((category) => (
         <Button
-          key={cat}
-          variant={active === cat ? 'default' : 'outline'}
+          key={category}
+          variant={
+            activeCategory === category ? 'default' : 'outline'
+          }
           onClick={() =>
-            router.push(cat === 'all' ? '/' : `/?category=${cat}`)
+            router.push(
+              category === 'all' ? '/' : `/?category=${category}`
+            )
           }
           className="w-full justify-start"
         >
-          {cat.charAt(0).toUpperCase() + cat.slice(1)}
+          {category.charAt(0).toUpperCase() + category.slice(1)}
         </Button>
       ))}
     </aside>

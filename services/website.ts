@@ -22,9 +22,9 @@ export type WebsiteData = {
   id: string;
   title: string;
   url: string;
-  category: 'tech' | 'ai' | 'marketing';
+  categories: ('tech' | 'ai' | 'marketing')[];
   description: string;
-  screenshotUrl?: string; // Correct: singular string
+  screenshotUrl?: string;
   createdBy: string;
   approved?: boolean;
   createdAt: number;
@@ -72,7 +72,9 @@ export const getApprovedWebsites = async (
   ];
 
   if (category && category !== 'all') {
-    queryConstraints.push(where('category', '==', category));
+    queryConstraints.push(
+      where('categories', 'array-contains', category)
+    );
   }
 
   const q = query(collection(db, 'websites'), ...queryConstraints);

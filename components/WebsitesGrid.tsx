@@ -1,10 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { Star, ImageIcon } from 'lucide-react';
+import { Star, FolderPlus, ImageIcon } from 'lucide-react';
 import { WebsiteData, rateWebsite } from '@/services/website';
 import { useAuth } from '@/context/AuthContext';
 import { SaveToFolderDialog } from './SaveToFolderDialog';
+import { Badge } from '@/components/ui/badge';
 
 export const WebsitesGrid = ({
   websites,
@@ -18,7 +19,6 @@ export const WebsitesGrid = ({
       alert('You must be logged in to rate a website.');
       return;
     }
-
     await rateWebsite(websiteId, user.uid, newRating);
   };
 
@@ -56,9 +56,17 @@ export const WebsitesGrid = ({
           <div className="p-4 flex flex-col flex-grow justify-between">
             <div>
               <h3 className="font-semibold text-lg">{site.title}</h3>
-              <p className="text-sm text-muted-foreground capitalize">
-                {site.category}
-              </p>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {site.categories.map((category) => (
+                  <Badge
+                    key={category}
+                    variant="secondary"
+                    className="capitalize"
+                  >
+                    {category}
+                  </Badge>
+                ))}
+              </div>
               <div className="flex items-center mt-2 gap-1">
                 <Star
                   className="text-yellow-400 fill-yellow-400"
@@ -72,7 +80,6 @@ export const WebsitesGrid = ({
                 </span>
               </div>
             </div>
-
             <div className="mt-4 space-y-3">
               {user && user.uid !== site.createdBy && (
                 <div>
@@ -94,7 +101,6 @@ export const WebsitesGrid = ({
                   </div>
                 </div>
               )}
-
               {user && <SaveToFolderDialog websiteId={site.id} />}
             </div>
           </div>
