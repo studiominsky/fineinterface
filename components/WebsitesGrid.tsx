@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Star, FolderPlus, ImageIcon } from 'lucide-react';
+import { Star, ImageIcon } from 'lucide-react';
 import { WebsiteData, rateWebsite } from '@/services/website';
 import { useAuth } from '@/context/AuthContext';
 import { SaveToFolderDialog } from './SaveToFolderDialog';

@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/context/AuthContext';
-import { addWebsite, WebsiteData } from '@/services/website';
+import { addWebsite } from '@/services/website';
 import { Star } from 'lucide-react';
 
 const availableCategories = ['tech', 'ai', 'marketing'] as const;
