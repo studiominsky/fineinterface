@@ -13,11 +13,11 @@ export const WebsitesGrid = ({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
       {websites.map((site) => (
-        <div key={site.id} className="website-card">
+        <div key={site.id} className="website-card h-full">
           <WebsiteDetailDialog website={site}>
             <div className="border bg-card rounded-sm overflow-hidden transition-all flex flex-col group cursor-pointer h-full">
               {site.screenshotUrl ? (
-                <div className="relative w-full h-64 overflow-hidden">
+                <div className="relative w-full aspect-video">
                   <Image
                     src={site.screenshotUrl}
                     alt={site.title}
@@ -27,7 +27,7 @@ export const WebsitesGrid = ({
                   />
                 </div>
               ) : (
-                <div className="relative w-full h-48 bg-muted flex items-center justify-center">
+                <div className="relative w-full aspect-video bg-muted flex items-center justify-center">
                   <ImageIcon
                     className="text-muted-foreground"
                     size={48}

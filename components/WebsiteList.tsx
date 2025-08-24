@@ -61,7 +61,7 @@ export function WebsiteList() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-90">
+      <div className="flex justify-center items-center h-64">
         <Spinner className="h-8 w-8" />
       </div>
     );
@@ -69,7 +69,7 @@ export function WebsiteList() {
 
   if (websites.length === 0) {
     return (
-      <div className="text-center p-10 mt-10">
+      <div className="text-center p-10 mt-10 border-2 border-dashed rounded-lg">
         <h2 className="text-xl font-semibold">No Websites Found</h2>
         <p className="text-muted-foreground mt-2">
           There are no websites in this category yet. Why not be the

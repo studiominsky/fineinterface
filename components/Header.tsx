@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
 import { SignInDialog } from './SignInDialog';
 import Image from 'next/image';
+import { ThemeToggle } from './ThemeToggle';
 
 export const Header = () => {
   const { user, logout } = useAuth();
@@ -14,14 +15,14 @@ export const Header = () => {
     <header className="w-full flex justify-between items-center p-4 border-b">
       <Link href="/" className="text-xl font-medium">
         <Image
-          src={'./fineinterface-light.svg'}
+          src={'/fineinterface-light.svg'}
           alt="Logo"
           width={210}
           height={100}
         />
       </Link>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         {user ? (
           <>
             <UploadWebsiteDialog />
@@ -37,6 +38,7 @@ export const Header = () => {
             <Button>Sign In</Button>
           </SignInDialog>
         )}
+        <ThemeToggle />
       </div>
     </header>
   );
