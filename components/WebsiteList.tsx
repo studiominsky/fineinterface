@@ -9,6 +9,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { Label } from './ui/label';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -84,13 +85,16 @@ export function WebsiteList() {
       <section className="px-7 py-12">
         <div className="grid md:grid-cols-1 gap-12 items-center justify-between max-w-180">
           <div className="text-center md:text-left">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            <h1 className="text-3xl mt-2 sm:text-4xl font-bold tracking-tight">
               Fine Interface
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
               Find the best and most beautiful website designs on the
               web. A curated collection for your inspiration.
             </p>
+            <Label className="bg-[#8bb108]/20 text-[#8bb108] w-fit font-bold px-4 py-1 rounded-xl text-xs mt-3">
+              In development
+            </Label>
           </div>
         </div>
       </section>

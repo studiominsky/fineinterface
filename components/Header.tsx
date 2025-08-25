@@ -21,7 +21,7 @@ export const Header = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="w-full flex justify-between items-center p-4 border-b">
+    <header className="sticky top-0 z-50 h-20 w-full flex justify-between items-center p-4 border-b bg-background">
       <div className="flex items-center gap-4">
         <Sheet>
           <SheetTrigger asChild>

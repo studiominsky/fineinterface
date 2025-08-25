@@ -25,13 +25,8 @@ const categoryGroups = [
     title: 'Services',
     items: [
       { name: 'Portfolio', slug: 'portfolio', icon: Briefcase },
-      { name: 'Assets', slug: 'assets', icon: Archive },
+      { name: 'Software', slug: 'software', icon: Archive },
       { name: 'Agency', slug: 'agency', icon: Building2 },
-    ],
-  },
-  {
-    title: 'Tech',
-    items: [
       {
         name: 'Artificial Intelligence',
         slug: 'ai',
@@ -67,7 +62,7 @@ export const SidebarContent = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div>
+      <div className="overflow-y-auto">
         <div className="space-y-1">
           <h3 className="mb-2 px-2 text-lg font-semibold tracking-tight">
             Discover
@@ -110,7 +105,7 @@ export const SidebarContent = () => {
         ))}
       </div>
 
-      <div className="mt-auto pt-4">
+      <div className="mt-auto pt-4 flex-shrink-0">
         <div className="mb-4 rounded-md flex gap-1 flex-col">
           <Image
             src="/website.svg"
@@ -120,7 +115,7 @@ export const SidebarContent = () => {
             className="rounded-sm mb-3"
           />
           <h4 className="font-semibold text-sm mb-1 px-1">
-            Need a professional website?
+            Studio Minsky can help you bring your project to life
           </h4>
           <p className="text-xs text-muted-foreground px-1 mb-3">
             If you need a professional looking website, contact Studio
@@ -133,8 +128,8 @@ export const SidebarContent = () => {
             rel="noopener noreferrer"
           >
             <Button className="bg-[#a4ca0a] text-black hover:bg-[#8bb108] w-full">
-              Explore more
-              <ArrowRight className="mr-2 h-4 w-4" />
+              Discover more
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </a>
         </div>
