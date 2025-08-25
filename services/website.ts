@@ -163,3 +163,42 @@ export const rateWebsite = async (
     });
   }
 };
+
+export const updateWebsite = async (
+  id: string,
+  data: Partial<Omit<WebsiteData, 'id' | 'createdBy'>>,
+  newFile?: File | null
+) => {
+  const websiteRef = doc(db, 'websites', id);
+  const updateData: Partial<Omit<WebsiteData, 'id'>> = { ...data };
+
+  if (newFile) {
+    const existingDoc = await getDoc(websiteRef);
+    const existingData = existingDoc.data() as WebsiteData;
+
+    if (existingData.screenshotUrl) {
+      try {
+        const oldImageRef = ref(storage, existingData.screenshotUrl);
+        await deleteObject(oldImageRef);
+      } catch (error) {
+        console.warn(
+          'Old screenshot not found or could not be deleted:',
+          error
+        );
+      }
+    }
+
+    const storageRef = ref(
+      storage,
+      `websites/${existingData.createdBy}/${Date.now()}_${
+        newFile.name
+      }`
+    );
+    await uploadBytes(storageRef, newFile);
+    updateData.screenshotUrl = await getDownloadURL(storageRef);
+  }
+
+  updateData.approved = false;
+
+  await updateDoc(websiteRef, updateData);
+};
