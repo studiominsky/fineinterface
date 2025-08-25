@@ -84,7 +84,7 @@ export function WebsiteList() {
     <div ref={container}>
       <section className="px-7 py-12">
         <div className="grid md:grid-cols-1 gap-12 items-center justify-between max-w-180">
-          <div className="text-center md:text-left">
+          <div className="text-left">
             <h1 className="text-3xl mt-2 sm:text-4xl font-bold tracking-tight">
               Fine Interface
             </h1>
