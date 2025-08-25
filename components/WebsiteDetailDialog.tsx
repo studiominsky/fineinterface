@@ -45,8 +45,8 @@ export function WebsiteDetailDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-w-5xl p-0 rounded-xl">
-        <div className="relative w-full h-150">
+      <DialogContent className="max-w-[90%] sm:max-w-5xl p-0 rounded-xl border border-border">
+        <div className="relative h-150">
           {website.screenshotUrl ? (
             <Image
               src={website.screenshotUrl}
