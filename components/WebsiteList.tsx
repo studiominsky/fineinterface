@@ -92,7 +92,7 @@ export function WebsiteList() {
               Find the best and most beautiful website designs on the
               web. A curated collection for your inspiration.
             </p>
-            <Label className="bg-[#8bb108]/20 text-[#8bb108] w-fit font-bold px-4 py-1 rounded-xl text-xs mt-3">
+            <Label className="bg-[#34c477]/30 text-[#018d42] dark:text-[#0bcb65] w-fit font-bold px-4 py-1 rounded-xl text-xs mt-3">
               In development
             </Label>
           </div>

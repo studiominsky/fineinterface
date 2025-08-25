@@ -107,7 +107,7 @@ export const UploadWebsiteDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#a4ca0a] text-black hover:bg-[#8bb108]">
+        <Button className="bg-[#34c477] text-black hover:bg-[#34c477]">
           <PlusCircle className="h-4 w-4" /> Upload Website
         </Button>
       </DialogTrigger>
