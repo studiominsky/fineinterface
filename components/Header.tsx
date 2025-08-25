@@ -68,7 +68,7 @@ export const Header = () => {
           </>
         ) : (
           <SignInDialog>
-            <Button className="bg-[#34c477] text-black hover:bg-[#34c477]">
+            <Button className="bg-[#34c477] text-black hover:bg-[#2bab67]">
               <LogIn className="mr-2 h-4 w-4" />
               Sign In
             </Button>

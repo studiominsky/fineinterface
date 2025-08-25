@@ -127,7 +127,7 @@ export const SidebarContent = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button className="bg-[#34c477] text-black hover:bg-[#34c477] w-full">
+            <Button className="bg-[#34c477] text-black hover:bg-[#2bab67] w-full">
               Discover more
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
