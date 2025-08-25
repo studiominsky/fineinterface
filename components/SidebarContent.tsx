@@ -113,7 +113,7 @@ export const SidebarContent = () => {
       <div className="mt-auto pt-4">
         <div className="mb-4 rounded-md flex gap-1 flex-col">
           <Image
-            src="/studiominsky.png"
+            src="/website.svg"
             alt="Studio Minsky"
             width={220}
             height={120}
