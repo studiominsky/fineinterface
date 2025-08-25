@@ -30,7 +30,6 @@ export const categorySlugs = [
   'marketing',
   'finance',
   'ecommerce',
-  'mobile-apps',
   'web-apps',
   'desktop-apps',
   'productivity',

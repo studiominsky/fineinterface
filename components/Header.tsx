@@ -7,6 +7,7 @@ import { UploadWebsiteDialog } from './UploadWebsiteDialog';
 import { SignInDialog } from './SignInDialog';
 import Image from 'next/image';
 import { ThemeToggle } from './ThemeToggle';
+import { LogIn } from 'lucide-react';
 
 export const Header = () => {
   const { user, logout } = useAuth();
@@ -17,7 +18,7 @@ export const Header = () => {
         <Image src={'/logo.svg'} alt="Logo" width={50} height={50} />
       </Link>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
         {user ? (
           <>
             <UploadWebsiteDialog />
@@ -30,7 +31,9 @@ export const Header = () => {
           </>
         ) : (
           <SignInDialog>
-            <Button>Sign In</Button>
+            <Button className="bg-[#a4ca0a] text-black hover:bg-[#8bb108]">
+              <LogIn className="mr-2 h-4 w-4" /> Sign In
+            </Button>
           </SignInDialog>
         )}
         <ThemeToggle />

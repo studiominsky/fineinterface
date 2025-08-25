@@ -8,20 +8,20 @@ import {
   BrainCircuit,
   Briefcase,
   Building2,
-  Cloud, // Icon for Bluesky
   Code,
   Cpu,
   Globe,
   Landmark,
   LayoutGrid,
   Megaphone,
+  MessageCircle,
   Monitor,
   PenTool,
   ShoppingCart,
   Smartphone,
   Target,
-  Twitter, // Icon for X
 } from 'lucide-react';
+import Image from 'next/image';
 
 const categoryGroups = [
   {
@@ -57,19 +57,6 @@ const categoryGroups = [
     items: [
       { name: 'Finance', slug: 'finance', icon: Landmark },
       { name: 'E-commerce', slug: 'ecommerce', icon: ShoppingCart },
-    ],
-  },
-  {
-    title: 'Apps',
-    items: [
-      { name: 'Mobile Apps', slug: 'mobile-apps', icon: Smartphone },
-      { name: 'Web Apps', slug: 'web-apps', icon: AppWindow },
-      { name: 'Desktop Apps', slug: 'desktop-apps', icon: Monitor },
-    ],
-  },
-  {
-    title: 'Productivity',
-    items: [
       { name: 'Productivity', slug: 'productivity', icon: Target },
     ],
   },
@@ -126,34 +113,38 @@ export const CategorySidebar = () => {
         ))}
       </div>
 
-      {/* --- Footer Section --- */}
       <div className="mt-auto">
-        <div className="flex items-center space-x-1 mb-2">
-          <Button variant="ghost" size="icon" asChild>
-            <a
-              href="https://x.com/your-profile" // <-- Replace with your X profile URL
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Visit X profile"
-            >
-              <Twitter className="h-4 w-4" />
-            </a>
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <a
-              href="https://bsky.app/profile/your-profile" // <-- Replace with your Bluesky profile URL
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Visit Bluesky profile"
-            >
-              <Cloud className="h-4 w-4" />
-            </a>
-          </Button>
+        <div className="mb-4 rounded-md flex gap-1 flex-col">
+          <Image
+            src="/website.svg"
+            alt="Studio Minsky"
+            width={220}
+            height={120}
+            className="rounded-md mb-3"
+          />
+          <h4 className="font-semibold text-sm mb-1 px-1">
+            Need a professional website?
+          </h4>
+          <p className="text-xs text-muted-foreground px-1 mb-3">
+            If you need a professional looking website, contact Studio
+            Minsky for a quote. We build digital tools that drive
+            business growth.
+          </p>
+          <a
+            href="https://studiominsky.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button className="bg-[#a4ca0a] text-black hover:bg-[#8bb108] w-full">
+              <MessageCircle className="mr-2 h-4 w-4" /> Contact
+            </Button>
+          </a>
         </div>
+
         <p className="px-2 text-xs text-muted-foreground">
           © {currentYear}{' '}
           <a
-            href="https://your-studio-website.com" // <-- Replace with your studio's website URL
+            href="https://studiominsky.com"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline"
