@@ -1,6 +1,17 @@
 <div align="start">
-  <img src="public/full-logo.svg" alt="Panellio Logo" width="100"/>
-  <span>Fine Interface</span>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/fineinterface-light">
+    <source media="(prefers-color-scheme: light)" srcset="public/fineinterface-light.svg">
+    <img alt="Panellio Logo" src="public/logo-light.svg" width="100">
+  </picture>
 </div>
 
-Find the best and most beautiful website designs on the web. A curated collection for your inspiration.
+Panellio is a personal management set of tools designed to help you organize your online life, reduce distractions, and boost productivity in a systematic way.
+
+## Features
+
+- Create directories
+- Add assets and features
+- Monitor and analyze data with AI
+- Track the stats
+- Free and paid version
