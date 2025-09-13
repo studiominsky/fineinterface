@@ -44,7 +44,11 @@ const formatCategoryLabel = (slug: string) => {
     .join(' ');
 };
 
-export const UploadWebsiteDialog = () => {
+export const UploadWebsiteDialog = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}) => {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
@@ -107,9 +111,11 @@ export const UploadWebsiteDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#34c477] text-black hover:bg-[#2bab67]">
-          <PlusCircle className="h-4 w-4" /> Upload Website
-        </Button>
+        {children || (
+          <Button className="bg-[#34c477] text-black hover:bg-[#2bab67]">
+            <PlusCircle className="h-4 w-4" /> Upload Website
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto max-w-150">
         <DialogHeader>

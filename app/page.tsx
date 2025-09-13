@@ -17,7 +17,7 @@ export default function Home() {
         >
           <CategorySidebar />
         </Suspense>
-        <main className="flex-1">
+        <main className="flex-1 bg-[#fcfcfc] dark:bg-black">
           <Suspense
             fallback={<p className="p-4">Loading websites...</p>}
           >

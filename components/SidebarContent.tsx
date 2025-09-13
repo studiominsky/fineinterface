@@ -17,8 +17,14 @@ import {
   PenTool,
   ShoppingCart,
   Target,
+  LogIn,
 } from 'lucide-react';
 import Image from 'next/image';
+import { useAuth } from '@/context/AuthContext';
+import { ThemeToggle } from './ThemeToggle';
+import { SignInDialog } from './SignInDialog';
+import { UploadWebsiteDialog } from './UploadWebsiteDialog';
+import Link from 'next/link';
 
 const categoryGroups = [
   {
@@ -59,10 +65,55 @@ export const SidebarContent = () => {
   const searchParams = useSearchParams();
   const activeCategory = searchParams.get('category') || 'all';
   const currentYear = new Date().getFullYear();
+  const { user, logout } = useAuth();
 
   return (
     <div className="flex flex-col h-full">
       <div className="overflow-y-auto">
+        <div className="pb-4 border-b mb-4 space-y-4 md:hidden">
+          <div className="space-y-4">
+            {user ? (
+              <div className="space-y-2">
+                <UploadWebsiteDialog />
+                <Link href="/profile">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                  >
+                    Profile
+                  </Button>
+                </Link>
+                <Button
+                  variant="ghost"
+                  onClick={logout}
+                  className="w-full justify-start"
+                >
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <div className="text-start space-y-2 pt-[30px]">
+                <p className="text-sm text-muted-foreground">
+                  Sign in to submit sites and save your favorites.
+                </p>
+                <SignInDialog>
+                  <Button className="bg-foreground text-background mt-2 hover:bg-[#2bab67] w-full">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Sign In
+                  </Button>
+                </SignInDialog>
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between pt-4 border-t">
+            <span className="text-sm text-muted-foreground">
+              Switch Theme
+            </span>
+            <ThemeToggle />
+          </div>
+        </div>
+
         <div className="space-y-1">
           <h3 className="mb-2 px-2 text-lg font-semibold tracking-tight">
             Discover
@@ -113,6 +164,7 @@ export const SidebarContent = () => {
             width={220}
             height={120}
             className="rounded-sm mb-3"
+            style={{ height: 'auto' }}
           />
           <h4 className="font-semibold text-sm mb-1 px-1">
             Studio Minsky can help you bring your project to life

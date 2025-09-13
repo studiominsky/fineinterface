@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
 import { SignInDialog } from './SignInDialog';
-import Image from 'next/image';
 import { ThemeToggle } from './ThemeToggle';
 import {
   Sheet,
@@ -14,51 +13,23 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Menu, LogIn } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { SidebarContent } from './SidebarContent';
+import Logo from './Logo';
 
 export const Header = () => {
   const { user, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 h-20 w-full flex justify-between items-center p-4 border-b bg-background">
-      <div className="flex items-center gap-4">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="lg:hidden"
-            >
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Open menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent
-            side="left"
-            className="w-64 p-4 overflow-y-auto"
-          >
-            <SheetHeader className="sr-only">
-              <SheetTitle>Menu</SheetTitle>
-            </SheetHeader>
-            <SidebarContent />
-          </SheetContent>
-        </Sheet>
+      <Logo />
 
-        <Link href="/" className="text-xl font-medium ">
-          <Image
-            src={'/logo.svg'}
-            alt="Logo"
-            width={50}
-            height={50}
-          />
-        </Link>
-      </div>
-
-      <div className="flex items-center gap-2">
+      <div className="hidden md:flex items-center gap-2">
         {user ? (
           <>
-            <UploadWebsiteDialog />
+            <UploadWebsiteDialog>
+              <Button variant="ghost">Add Website</Button>
+            </UploadWebsiteDialog>
             <Link href="/profile">
               <Button variant="ghost">Profile</Button>
             </Link>
@@ -68,13 +39,34 @@ export const Header = () => {
           </>
         ) : (
           <SignInDialog>
-            <Button className="bg-[#34c477] text-black hover:bg-[#2bab67]">
-              <LogIn className="mr-2 h-4 w-4" />
+            <Button variant="ghost" className="font-medium">
               Sign In
             </Button>
           </SignInDialog>
         )}
         <ThemeToggle />
+      </div>
+
+      <div className="md:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent
+            side="right"
+            className="w-64 p-4 flex flex-col"
+          >
+            <SheetHeader className="sr-only">
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <div className="flex-grow overflow-y-auto">
+              <SidebarContent />
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );

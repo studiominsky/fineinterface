@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getApprovedWebsites, WebsiteData } from '@/services/website';
 import { WebsitesGrid } from './WebsitesGrid';
@@ -13,9 +13,18 @@ import { Label } from './ui/label';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const formatCategoryName = (slug: string | null) => {
+  if (!slug) return '';
+  return slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 export function WebsiteList() {
   const [websites, setWebsites] = useState<WebsiteData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [totalWebsites, setTotalWebsites] = useState(0);
   const searchParams = useSearchParams();
   const category = searchParams.get('category');
   const container = useRef(null);
@@ -27,10 +36,32 @@ export function WebsiteList() {
         category || undefined
       );
       setWebsites(approvedWebsites);
+
+      if (!category || category === 'all') {
+        const allWebsites = await getApprovedWebsites();
+        setTotalWebsites(allWebsites.length);
+      }
+
       setLoading(false);
     };
 
     fetchWebsites();
+  }, [category]);
+
+  const pageTitle = useMemo(() => {
+    if (category && category !== 'all') {
+      return `${formatCategoryName(category)} Websites`;
+    }
+    return 'Finest Interfaces across the Web';
+  }, [category]);
+
+  const pageDescription = useMemo(() => {
+    if (category && category !== 'all') {
+      return `Explore hand-picked ${formatCategoryName(
+        category
+      ).toLowerCase()} websites. Your go-to resource for industry-specific design inspiration.`;
+    }
+    return 'Explore our hand-picked collection of exceptional websites. A go-to resource for designers, developers, and creatives seeking inspiration.';
   }, [category]);
 
   useGSAP(
@@ -73,8 +104,8 @@ export function WebsiteList() {
       <div className="text-center p-10 mt-10">
         <h2 className="text-xl font-semibold">No Websites Found</h2>
         <p className="text-muted-foreground mt-2">
-          There are no websites in this category yet. Why not be the
-          first to submit one?
+          It looks like there are no websites in this category yet. Be
+          the first to submit one and inspire others!
         </p>
       </div>
     );
@@ -83,23 +114,27 @@ export function WebsiteList() {
   return (
     <div ref={container}>
       <section className="px-7 py-12">
-        <div className="grid md:grid-cols-1 gap-12 items-center justify-between max-w-180">
+        <div className="grid md:grid-cols-1 gap-12 items-center justify-between max-w-2xl">
           <div className="text-left">
+            <Label className="bg-[#34c477]/30 text-[#018d42] dark:text-[#0bcb65] w-fit font-bold px-4 py-1 rounded-xl text-xs mb-3">
+              In beta
+            </Label>
             <h1 className="text-3xl mt-2 sm:text-4xl font-bold tracking-tight">
-              Fine Interface
+              {pageTitle}
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              Find the best and most beautiful website designs on the
-              web. A curated collection for your inspiration.
+              {pageDescription}
             </p>
-            <Label className="bg-[#34c477]/30 text-[#018d42] dark:text-[#0bcb65] w-fit font-bold px-4 py-1 rounded-xl text-xs mt-3">
-              In development
-            </Label>
+            <div className="flex items-center gap-x-4 mt-4">
+              <div className="font-semibold py-1 rounded-full text-xs">
+                {totalWebsites > 0
+                  ? `${totalWebsites} Websites Curated`
+                  : 'Community Driven'}
+              </div>
+            </div>
           </div>
         </div>
       </section>
-
-      <hr className="mb-4" />
 
       <WebsitesGrid websites={websites} />
     </div>

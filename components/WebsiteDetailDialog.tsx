@@ -18,6 +18,7 @@ import Link from 'next/link';
 import { Star, ExternalLink, ImageIcon } from 'lucide-react';
 import { SaveToFolderPopover } from './SaveToFolderPopover';
 import { toast } from 'sonner';
+import * as React from 'react';
 
 export function WebsiteDetailDialog({
   website,
@@ -45,83 +46,80 @@ export function WebsiteDetailDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-w-[90%] sm:max-w-5xl p-0 rounded-xl border border-border">
-        <div className="relative h-150">
-          {website.screenshotUrl ? (
-            <Image
-              src={website.screenshotUrl}
-              alt={website.title}
-              fill
-              className="object-cover rounded-t-xl"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-muted">
-              <ImageIcon
-                className="text-muted-foreground"
-                size={48}
+
+      <DialogContent
+        className="p-0 max-w-[min(100vw-2rem,700px)]"
+        aria-describedby={undefined}
+      >
+        <div className="grid h-full max-h-[85dvh] grid-rows-[auto,1fr]">
+          <div className="relative overflow-auto">
+            {website.screenshotUrl ? (
+              <Image
+                src={website.screenshotUrl}
+                alt={website.title}
+                width={1600}
+                height={900}
+                className="w-full h-auto object-cover rounded-t-lg"
+                sizes="100vw"
+                priority
               />
-            </div>
-          )}
-        </div>
-
-        <div className="p-6">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">
-              {website.title}
-            </DialogTitle>
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              {website.categories.map((category) => (
-                <Badge
-                  key={category}
-                  variant="secondary"
-                  className="capitalize"
-                >
-                  {category}
-                </Badge>
-              ))}
-            </div>
-          </DialogHeader>
-
-          <div className="flex items-center my-4 gap-1 text-sm text-muted-foreground">
-            <Star
-              className="text-yellow-400 fill-yellow-400"
-              size={16}
-            />
-            <span className="font-bold text-foreground">
-              {website.averageRating.toFixed(1)}
-            </span>
-            <span>
-              ({Object.keys(website.ratings).length} ratings)
-            </span>
-          </div>
-
-          <DialogDescription className="text-base max-h-40 overflow-y-auto">
-            {website.description}
-          </DialogDescription>
-
-          <div className="space-y-4 mt-6">
-            {user && user.uid !== website.createdBy && (
-              <div className="p-3 bg-muted/50 rounded-md">
-                <p className="text-sm font-semibold mb-2">
-                  Your Rating
-                </p>
-                <div className="flex items-center">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={`cursor-pointer transition-colors hover:text-blue-500 w-6 h-6 ${
-                        (website.ratings[user.uid] || 0) >= star
-                          ? 'text-blue-500 fill-blue-500'
-                          : 'text-gray-300'
-                      }`}
-                      onClick={() => handleRate(star)}
-                    />
-                  ))}
-                </div>
+            ) : (
+              <div className="w-full h-[240px] flex items-center justify-center bg-muted rounded-t-lg">
+                <ImageIcon
+                  className="text-muted-foreground"
+                  size={48}
+                />
               </div>
             )}
+          </div>
 
-            <DialogFooter className="flex flex-col sm:flex-row sm:justify-start gap-2">
+          <div className="flex min-h-0 flex-col">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">
+                  {website.title}
+                </DialogTitle>
+
+                <div className="flex flex-wrap items-center gap-2 pt-2">
+                  {website.categories.map((category) => (
+                    <Badge
+                      key={category}
+                      variant="secondary"
+                      className="capitalize"
+                    >
+                      {category}
+                    </Badge>
+                  ))}
+                </div>
+              </DialogHeader>
+
+              <DialogDescription className="text-base leading-relaxed">
+                {website.description}
+              </DialogDescription>
+
+              {user && user.uid !== website.createdBy && (
+                <div className="p-3 bg-muted/50 rounded-md">
+                  <p className="text-sm font-semibold mb-2">
+                    Your Rating
+                  </p>
+                  <div className="flex items-center">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`cursor-pointer transition-colors hover:opacity-80 w-6 h-6 ${
+                          (website.ratings[user.uid] || 0) >= star
+                            ? 'text-blue-500 fill-blue-500'
+                            : 'text-gray-300'
+                        }`}
+                        onClick={() => handleRate(star)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <DialogFooter className="mt-auto gap-2 p-4 md:p-6">
               <Link
                 href={website.url}
                 target="_blank"

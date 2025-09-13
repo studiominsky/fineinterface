@@ -79,7 +79,7 @@ export const WebsitesGrid = ({
                   />
                 </div>
               )}
-              <div className="p-4 flex items-center justify-between gap-2">
+              <div className="p-4 flex items-center justify-between gap-2 bg-background">
                 <h3 className="font-semibold text-sm truncate">
                   {site.title}
                 </h3>
