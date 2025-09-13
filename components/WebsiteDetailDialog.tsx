@@ -73,7 +73,7 @@ export function WebsiteDetailDialog({
             )}
           </div>
 
-          <div className="flex min-h-0 flex-col">
+          <div className="flex min-h-0 flex-col border-b border-l border-r">
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-bold">
