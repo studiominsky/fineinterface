@@ -19,7 +19,6 @@ import {
   Target,
   LogIn,
 } from 'lucide-react';
-import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
 import { SignInDialog } from './SignInDialog';
@@ -70,7 +69,7 @@ export const SidebarContent = () => {
   return (
     <div className="flex flex-col h-full">
       <div className="overflow-y-auto">
-        <div className="pb-4 border-b mb-4 space-y-4 md:hidden">
+        <div className="pb-4 border-b mb-4 space-y-4 lg:hidden">
           <div className="space-y-4">
             {user ? (
               <div className="space-y-2">
@@ -156,45 +155,38 @@ export const SidebarContent = () => {
         ))}
       </div>
 
-      <div className="mt-auto pt-4 flex-shrink-0">
-        <div className="mb-4 rounded-md flex gap-1 flex-col">
-          <Image
-            src="/website.svg"
-            alt="Studio Minsky"
-            width={220}
-            height={120}
-            className="rounded-sm mb-3"
-            style={{ height: 'auto' }}
-          />
-          <h4 className="font-semibold text-sm mb-1 px-1">
-            Studio Minsky can help you bring your project to life
+      <div className="mt-auto pt-4 flex-shrink-0 border-t">
+        <div className="px-2 space-y-2 text-start">
+          <h4 className="font-semibold text-sm">
+            Need a stunning website or web application?
           </h4>
-          <p className="text-xs text-muted-foreground px-1 mb-3">
-            If you need a professional looking website, contact Studio
-            Minsky for a quote. We build digital tools that drive
-            business growth.
+          <p className="text-xs text-muted-foreground">
+            Studio Minsky builds digital tools that drive business
+            growth.
           </p>
           <a
             href="https://studiominsky.com"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button className="bg-[#34c477] text-black hover:bg-[#2bab67] w-full">
-              Discover more
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button
+              size="sm"
+              className="bg-[#34c477] text-black hover:bg-[#2bab67] w-full text-xs h-8"
+            >
+              Discover More
+              <ArrowRight className="ml-2 h-3 w-3" />
             </Button>
           </a>
         </div>
-
-        <p className="px-2 text-xs text-muted-foreground">
-          © {currentYear}{' '}
+        <p className="px-2 pt-4 text-xs text-center text-muted-foreground">
+          © {currentYear} Project by{' '}
           <a
             href="https://studiominsky.com"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline"
           >
-            Project by Studio Minsky
+            Studio Minsky
           </a>
         </p>
       </div>

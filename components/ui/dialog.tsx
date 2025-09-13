@@ -66,7 +66,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          'bg-background border border-border data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+          'bg-background border data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
           'fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2',
           'w-full max-w-[calc(100vw-2rem)] lg:max-w-4xl xl:max-w-6xl rounded-lg duration-200',
           'grid overflow-hidden',
@@ -96,10 +96,7 @@ function DialogHeader({
   return (
     <div
       data-slot="dialog-header"
-      className={cn(
-        'flex flex-col gap-2 text-center sm:text-left',
-        className
-      )}
+      className={cn('flex flex-col gap-2 text-left', className)}
       {...props}
     />
   );

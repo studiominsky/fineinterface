@@ -24,7 +24,7 @@ export const Header = () => {
     <header className="sticky top-0 z-50 h-20 w-full flex justify-between items-center p-4 border-b bg-background">
       <Logo />
 
-      <div className="hidden md:flex items-center gap-2">
+      <div className="hidden lg:flex items-center gap-2">
         {user ? (
           <>
             <UploadWebsiteDialog>
@@ -47,7 +47,7 @@ export const Header = () => {
         <ThemeToggle />
       </div>
 
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon">
