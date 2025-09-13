@@ -103,18 +103,18 @@ export function SignInDialog({
                   Build inspiration folders for your next project
                 </li>
               </ul>
-            </div>
 
-            <div className="text-xs text-muted-foreground">
-              Project by{' '}
-              <a
-                href="https://studiominsky.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-foreground"
-              >
-                Studio Minsky
-              </a>
+              <div className="text-xs text-muted-foreground">
+                Project by{' '}
+                <a
+                  href="https://studiominsky.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-foreground"
+                >
+                  Studio Minsky
+                </a>
+              </div>
             </div>
           </div>
 

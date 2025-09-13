@@ -97,7 +97,7 @@ export const SidebarContent = () => {
                   Sign in to submit sites and save your favorites.
                 </p>
                 <SignInDialog>
-                  <Button className="bg-foreground text-background mt-2 hover:bg-[#2bab67] w-full">
+                  <Button className="bg-foreground text-background mt-2 hover:bg-foreground/90 w-full">
                     <LogIn className="mr-2 h-4 w-4" />
                     Sign In
                   </Button>
