@@ -124,7 +124,7 @@ export const EditWebsiteDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto max-w-150">
+      <DialogContent className="max-h-[90vh] overflow-y-auto max-w-150 p-8">
         <DialogHeader>
           <DialogTitle>Edit Your Submission</DialogTitle>
           <DialogDescription>
@@ -202,11 +202,10 @@ export const EditWebsiteDialog = ({
                           }
                         >
                           <Check
-                            className={`mr-2 h-4 w-4 ${
-                              categories.includes(category)
-                                ? 'opacity-100'
-                                : 'opacity-0'
-                            }`}
+                            className={`mr-2 h-4 w-4 ${categories.includes(category)
+                              ? 'opacity-100'
+                              : 'opacity-0'
+                              }`}
                           />
                           {formatCategoryLabel(category)}
                         </CommandItem>
