@@ -21,7 +21,7 @@ export const Header = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 h-20 w-full flex justify-between items-center p-4 border-b bg-background">
+    <header className="sticky top-0 h-20 w-full flex justify-between items-center p-4 border-b bg-background">
       <Logo />
 
       <div className="hidden lg:flex items-center gap-2">
