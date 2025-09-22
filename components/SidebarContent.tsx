@@ -24,7 +24,6 @@ import { ThemeToggle } from './ThemeToggle';
 import { SignInDialog } from './SignInDialog';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
 import Link from 'next/link';
-import Logo from './Logo'; // 1. Import the Logo component
 
 export const categoryGroups = [
   {
@@ -83,10 +82,6 @@ export const SidebarContent = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="hidden lg:flex p-4 border-b">
-        <Logo />
-      </div>
-
       <div className="flex-grow overflow-y-auto">
         <div className="p-4">
           <div className="pb-4 border-b mb-4 space-y-4 lg:hidden">
