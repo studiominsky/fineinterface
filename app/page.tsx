@@ -1,7 +1,9 @@
-import { CategorySidebar } from '@/components/CategorySidebar';
-import { Header } from '@/components/Header';
-import { WebsiteList } from '@/components/WebsiteList';
 import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
+import { Header } from '@/components/Header';
+import { CategorySidebar } from '@/components/CategorySidebar';
+
+const WebsiteList = dynamic(() => import('@/components/WebsiteList').then((mod) => mod.WebsiteList));
 
 export default function Home() {
   return (
@@ -17,7 +19,7 @@ export default function Home() {
         >
           <CategorySidebar />
         </Suspense>
-        <main className="flex-1 bg-[#fcfcfc] dark:bg-black">
+        <main className="flex-1 bg-[#fcfcfc] dark:bg-black min-h-screen">
           <Suspense
             fallback={<p className="p-4">Loading websites...</p>}
           >

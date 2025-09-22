@@ -26,7 +26,7 @@ export const WebsitesGrid = ({
 }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-7">
-      {websites.map((site) => (
+      {websites.map((site, index) => (
         <div
           key={site.id}
           className="website-card h-full relative group"
@@ -60,7 +60,7 @@ export const WebsitesGrid = ({
           )}
 
           <WebsiteDetailDialog website={site}>
-            <div className="overflow-hidden transition-all flex flex-col cursor-pointer h-full border border-border rounded-md duration-300 hover:-translate-y-2">
+            <button className="overflow-hidden transition-all flex flex-col cursor-pointer h-full border border-border rounded-md duration-300 hover:-translate-y-2 w-full text-left">
               {site.screenshotUrl ? (
                 <div className="relative w-full aspect-video ">
                   <Image
@@ -69,6 +69,7 @@ export const WebsitesGrid = ({
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover"
+                    priority={index < 3}
                   />
                 </div>
               ) : (
@@ -83,10 +84,8 @@ export const WebsitesGrid = ({
                 <h3 className="font-semibold text-sm truncate">
                   {site.title}
                 </h3>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  asChild
+                <div
+                  className="p-2"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <a
@@ -94,12 +93,13 @@ export const WebsitesGrid = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Visit ${site.title} website`}
+                    className="flex items-center justify-center"
                   >
-                    <ExternalLink className="h-4 w-4" />
+                    <ExternalLink className="h-4 w-4 text-muted-foreground" />
                   </a>
-                </Button>
+                </div>
               </div>
-            </div>
+            </button>
           </WebsiteDetailDialog>
         </div>
       ))}

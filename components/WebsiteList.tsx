@@ -116,7 +116,7 @@ export function WebsiteList() {
       <section className="px-7 py-12">
         <div className="grid md:grid-cols-1 gap-12 items-center justify-between max-w-2xl">
           <div className="text-left">
-            <Label className="bg-[#34c477]/30 text-[#018d42] dark:text-[#0bcb65] w-fit font-bold px-4 py-1 rounded-xl text-xs mb-3">
+            <Label className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 w-fit font-bold px-4 py-1 rounded-xl text-xs mb-3">
               Version 1.0
             </Label>
             <h1 className="text-3xl mt-2 sm:text-4xl font-bold tracking-tight">

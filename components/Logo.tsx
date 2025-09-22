@@ -29,8 +29,9 @@ const Logo = () => {
           src={src}
           alt="Fine Interface Logo"
           width={190}
-          height={80}
+          height={40}
           priority
+          className="h-[40px] w-[190px]"
         />
       </span>
     </Link>
