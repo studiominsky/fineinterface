@@ -78,7 +78,7 @@ export function MySubmissions() {
             You haven&apos;t submitted any websites yet.
           </p>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-4 overflow-auto max-h-[600px]">
             {websites.map((website) => (
               <div
                 key={website.id}
@@ -109,11 +109,10 @@ export function MySubmissions() {
                 </div>
                 <div className="flex items-center gap-2">
                   <div
-                    className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-                      website.approved
+                    className={`text-xs font-semibold px-2.5 py-1 rounded-full ${website.approved
                         ? 'bg-green-100 text-green-800'
                         : 'bg-yellow-100 text-yellow-800'
-                    }`}
+                      }`}
                   >
                     {website.approved ? 'Approved' : 'Pending'}
                   </div>

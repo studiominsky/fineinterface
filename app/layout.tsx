@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Fine Interface',
   description:
-    'Discover and save beautifully designed web interfaces.',
+    'Explore our hand-picked collection of exceptional websites, applications, and interfaces. A go-to resource for designers, developers, and creatives seeking inspiration.',
 };
 
 export default function RootLayout({

@@ -21,6 +21,7 @@ import { db, storage } from '@/lib/firebase';
 export const categorySlugs = [
   'portfolio',
   'assets',
+  'software',
   'agency',
   'ai',
   'tech',
@@ -141,29 +142,6 @@ export const deleteWebsite = async (id: string) => {
   await deleteDoc(doc(db, 'websites', id));
 };
 
-export const rateWebsite = async (
-  websiteId: string,
-  userId: string,
-  rating: number
-) => {
-  const websiteRef = doc(db, 'websites', websiteId);
-  const websiteDoc = await getDoc(websiteRef);
-
-  if (websiteDoc.exists()) {
-    const websiteData = websiteDoc.data() as WebsiteData;
-    const newRatings = { ...websiteData.ratings, [userId]: rating };
-    const ratingsArray = Object.values(newRatings);
-    const averageRating =
-      ratingsArray.reduce((acc, curr) => acc + curr, 0) /
-      ratingsArray.length;
-
-    await updateDoc(websiteRef, {
-      ratings: newRatings,
-      averageRating: averageRating,
-    });
-  }
-};
-
 export const updateWebsite = async (
   id: string,
   data: Partial<Omit<WebsiteData, 'id' | 'createdBy'>>,
@@ -190,8 +168,7 @@ export const updateWebsite = async (
 
     const storageRef = ref(
       storage,
-      `websites/${existingData.createdBy}/${Date.now()}_${
-        newFile.name
+      `websites/${existingData.createdBy}/${Date.now()}_${newFile.name
       }`
     );
     await uploadBytes(storageRef, newFile);
