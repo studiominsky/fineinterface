@@ -32,7 +32,7 @@ import { useAuth } from '@/context/AuthContext';
 import { addWebsite, categorySlugs } from '@/services/website';
 import { toast } from 'sonner';
 import { Spinner } from './ui/spinner';
-import { Check, ChevronsUpDown, PlusCircle } from 'lucide-react';
+import { Check, ChevronsUpDown } from 'lucide-react';
 
 const availableCategories = categorySlugs;
 type Category = (typeof availableCategories)[number];
@@ -112,9 +112,7 @@ export const UploadWebsiteDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {children || (
-          <Button className="bg-[#34c477] text-black hover:bg-[#2bab67]">
-            <PlusCircle className="h-4 w-4" /> Upload Website
-          </Button>
+          <Button variant="ghost">Add Website</Button>
         )}
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto max-w-150 p-8">
