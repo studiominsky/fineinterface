@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { Header } from '@/components/Header';
 import { CategorySidebar } from '@/components/CategorySidebar';
 import { WebsiteList } from '@/components/WebsiteList';
-import Loading from '@/components/Loading'; // Import your loading component
+import Loading from '@/components/Loading';
 
 export default function Home() {
   return (

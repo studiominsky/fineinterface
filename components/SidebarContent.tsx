@@ -2,62 +2,13 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import {
-  Archive,
-  ArrowRight,
-  BrainCircuit,
-  Briefcase,
-  Building2,
-  Code,
-  Cpu,
-  Globe,
-  Landmark,
-  LayoutGrid,
-  Megaphone,
-  PenTool,
-  ShoppingCart,
-  Target,
-  LogIn,
-} from 'lucide-react';
+import { ArrowRight, LayoutGrid, LogIn } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
 import { SignInDialog } from './SignInDialog';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
 import Link from 'next/link';
-
-export const categoryGroups = [
-  {
-    title: 'Services',
-    items: [
-      { name: 'Portfolio', slug: 'portfolio', icon: Briefcase },
-      { name: 'Software', slug: 'software', icon: Archive },
-      { name: 'Agency', slug: 'agency', icon: Building2 },
-      {
-        name: 'Artificial Intelligence',
-        slug: 'ai',
-        icon: BrainCircuit,
-      },
-      { name: 'Tech', slug: 'tech', icon: Cpu },
-      { name: 'Web3', slug: 'web3', icon: Globe },
-    ],
-  },
-  {
-    title: 'Tools',
-    items: [
-      { name: 'Development Tools', slug: 'dev-tools', icon: Code },
-      { name: 'Design Tools', slug: 'design-tools', icon: PenTool },
-      { name: 'Marketing', slug: 'marketing', icon: Megaphone },
-    ],
-  },
-  {
-    title: 'Money',
-    items: [
-      { name: 'Finance', slug: 'finance', icon: Landmark },
-      { name: 'E-commerce', slug: 'ecommerce', icon: ShoppingCart },
-      { name: 'Productivity', slug: 'productivity', icon: Target },
-    ],
-  },
-];
+import { categoryGroups } from '@/lib/categories';
 
 export const SidebarContent = ({
   onLinkClick,
@@ -81,9 +32,8 @@ export const SidebarContent = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-background">
-      <div className="p-4">
-        {/* This section is only for the mobile sheet view */}
+    <div className="flex flex-col h-full bg-background p-4">
+      <div className="flex-grow overflow-y-auto">
         <div className="pb-4 border-b mb-4 space-y-4 lg:hidden">
           <div className="space-y-4">
             {user ? (
