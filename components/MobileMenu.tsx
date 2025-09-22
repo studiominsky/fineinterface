@@ -1,73 +1,54 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetTrigger,
+} from '@/components/ui/sheet';
 import { Menu, X } from 'lucide-react';
 import { SidebarContent } from './SidebarContent';
 import Logo from './Logo';
-import { cn } from '@/lib/utils';
 
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
+            setIsOpen(false);
         }
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, [isOpen]);
-
-    const toggleMenu = () => {
-        setIsOpen(!isOpen);
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname, searchParams]);
 
     return (
         <div className="lg:hidden">
-            <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleMenu}
-                aria-label="Open menu"
-            >
-                <Menu className="h-6 w-6" />
-            </Button>
-
-            <div
-                onClick={toggleMenu}
-                className={cn(
-                    'fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ease-in-out',
-                    isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                )}
-            />
-
-            <aside
-                className={cn(
-                    'fixed top-0 right-0 z-50 h-full w-4/5 max-w-sm transform bg-background shadow-xl transition-transform duration-300 ease-in-out',
-                    isOpen ? 'translate-x-0' : 'translate-x-full'
-                )}
-            >
-                <div className="flex h-full flex-col">
-                    <div className="flex items-center justify-between p-4 border-b">
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                        <Menu className="h-6 w-6" />
+                        <span className="sr-only">Open menu</span>
+                    </Button>
+                </SheetTrigger>
+                <SheetContent>
+                    <div className="flex items-center justify-between">
                         <Logo />
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={toggleMenu}
-                            aria-label="Close menu"
-                        >
-                            <X className="h-6 w-6" />
-                        </Button>
+                        <SheetClose asChild>
+                            <Button variant="ghost" size="icon">
+                                <X className="h-6 w-6" />
+                            </Button>
+                        </SheetClose>
                     </div>
 
-                    <div className="flex-1 bg-background">
-                        <SidebarContent onLinkClick={toggleMenu} />
+                    <div className="mt-8">
+                        <SidebarContent onLinkClick={() => setIsOpen(false)} />
                     </div>
-                </div>
-            </aside>
+                </SheetContent>
+            </Sheet>
         </div>
     );
 }

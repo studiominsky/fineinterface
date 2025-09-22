@@ -6,14 +6,22 @@ import { useAuth } from '@/context/AuthContext';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
 import { SignInDialog } from './SignInDialog';
 import { ThemeToggle } from './ThemeToggle';
-import { MobileMenu } from './MobileMenu'; // Ensure this is imported
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { Menu } from 'lucide-react';
+import { SidebarContent } from './SidebarContent';
 import Logo from './Logo';
 
 export const Header = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="sticky top-0 z-30 h-20 w-full flex justify-between items-center p-4 border-b bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 h-20 w-full flex justify-between items-center p-4 border-b bg-background">
       <Logo />
 
       <div className="hidden lg:flex items-center gap-2">
@@ -39,8 +47,27 @@ export const Header = () => {
         <ThemeToggle />
       </div>
 
-      {/* Your new custom mobile menu goes here */}
-      <MobileMenu />
+      <div className="lg:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent
+            side="right"
+            className="w-64 p-4 flex flex-col"
+          >
+            <SheetHeader className="sr-only">
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <div className="flex-grow overflow-y-auto">
+              <SidebarContent />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
     </header>
   );
 };
