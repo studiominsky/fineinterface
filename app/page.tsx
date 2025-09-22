@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import { Header } from '@/components/Header';
-import { CategorySidebar } from '@/components/CategorySidebar'; // This component contains SidebarContent
+import { CategorySidebar } from '@/components/CategorySidebar';
 import { WebsiteList } from '@/components/WebsiteList';
-import Loading from '@/components/Loading';
+import Loading from '@/components/Loading'; // Import your loading component
 
 export default function Home() {
   return (

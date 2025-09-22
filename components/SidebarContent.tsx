@@ -24,7 +24,6 @@ import { ThemeToggle } from './ThemeToggle';
 import { SignInDialog } from './SignInDialog';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
 import Link from 'next/link';
-import Logo from './Logo'; // 1. Import the Logo component
 
 export const categoryGroups = [
   {
