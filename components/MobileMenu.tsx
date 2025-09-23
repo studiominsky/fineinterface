@@ -6,7 +6,7 @@ import { gsap } from 'gsap';
 import { Menu, X } from 'lucide-react';
 import clsx from 'clsx';
 import Logo from './Logo';
-import { SidebarContent } from './SidebarContent';
+import { MobileSidebarContent } from './MobileSidebarContent'; // <-- Import the new component
 
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
@@ -17,8 +17,10 @@ export function MobileMenu() {
     const overlayRef = useRef<HTMLDivElement>(null);
     const tlRef = useRef<gsap.core.Timeline | null>(null);
 
+    // Close on route changes
     useEffect(() => setIsOpen(false), [pathname]);
 
+    // Build GSAP timeline once
     useEffect(() => {
         const ctx = gsap.context(() => {
             const panel = panelRef.current;
@@ -53,8 +55,9 @@ export function MobileMenu() {
         }, rootRef);
 
         return () => ctx.revert();
-    }, []);
+    }, [isOpen]); // Re-run if isOpen changes to get the menu items
 
+    // Open/close animation + scroll lock
     useEffect(() => {
         const tl = tlRef.current;
         if (!tl) return;
@@ -118,7 +121,8 @@ export function MobileMenu() {
                 </div>
 
                 <div className="flex-1 overflow-y-auto pt-4">
-                    <SidebarContent onLinkClick={() => setIsOpen(false)} />
+                    {/* Use the new mobile-specific content component */}
+                    <MobileSidebarContent onLinkClick={() => setIsOpen(false)} />
                 </div>
             </div>
         </div>
