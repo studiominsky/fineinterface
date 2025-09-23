@@ -21,7 +21,6 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
 
     const handleNavigation = (path: string) => {
         router.push(path);
-        onLinkClick?.();
     };
 
     const handleLogout = () => {
