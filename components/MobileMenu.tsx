@@ -21,25 +21,29 @@ export function MobileMenu() {
     }, [pathname, searchParams]);
 
     useEffect(() => {
-        tl.current = gsap.timeline({ paused: true });
+        gsap.context(() => {
+            tl.current = gsap.timeline({ paused: true });
 
-        // Menu animation
-        tl.current.to(menuRef.current, {
-            x: 0,
-            duration: 0.3,
-            ease: 'power3.inOut',
+            tl.current
+                .to(overlayRef.current, {
+                    opacity: 1,
+                    duration: 0.3,
+                    ease: 'power2.inOut',
+                })
+                .to(
+                    menuRef.current,
+                    {
+                        x: 0,
+                        duration: 0.3,
+                        ease: 'power2.inOut',
+                    },
+                    '<'
+                );
         });
 
-        // Overlay animation
-        tl.current.to(
-            overlayRef.current,
-            {
-                opacity: 1,
-                duration: 0.3,
-                ease: 'power3.inOut',
-            },
-            '<'
-        );
+        return () => {
+            tl.current?.kill();
+        };
     }, []);
 
     useEffect(() => {
@@ -51,19 +55,6 @@ export function MobileMenu() {
             document.body.style.overflow = '';
         }
     }, [isOpen]);
-
-    // Close menu on outside click
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [menuRef]);
 
     return (
         <div className="lg:hidden">
@@ -79,16 +70,17 @@ export function MobileMenu() {
 
             <div
                 ref={overlayRef}
-                className="fixed inset-0 bg-black/50 z-[99] opacity-0"
+                className="fixed inset-0 bg-black/60 z-[999] opacity-0"
                 onClick={() => setIsOpen(false)}
                 style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
             />
+
             <div
                 ref={menuRef}
-                className="fixed top-0 right-0 h-full w-64 bg-background z-[100] p-5 flex flex-col"
+                className="fixed top-0 right-0 h-full w-64 bg-background z-[1000] p-0 flex flex-col"
                 style={{ transform: 'translateX(100%)' }}
             >
-                <div className="sticky top-0 z-10 h-14 border-b bg-background/80 backdrop-blur flex items-center justify-between">
+                <div className="p-5 sticky top-0 h-14 border-b bg-background/80 backdrop-blur flex items-center justify-between">
                     <Logo />
                     <Button
                         aria-label="Close menu"
@@ -101,7 +93,7 @@ export function MobileMenu() {
                     </Button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto pt-4">
+                <div className="flex-1 overflow-y-auto">
                     <SidebarContent onLinkClick={() => setIsOpen(false)} />
                 </div>
             </div>

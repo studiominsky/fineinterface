@@ -6,14 +6,14 @@ import { useAuth } from '@/context/AuthContext';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
 import { SignInDialog } from './SignInDialog';
 import { ThemeToggle } from './ThemeToggle';
+import { MobileMenu } from './MobileMenu'; // Import the new component
 import Logo from './Logo';
-import { MobileMenu } from './MobileMenu';
 
 export const Header = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="sticky top-0 h-20 w-full flex justify-between items-center p-4 border-b bg-background">
+    <header className="sticky top-0 h-20 w-full flex justify-between items-center p-4 border-b bg-background z-50">
       <Logo />
 
       <div className="hidden lg:flex items-center gap-2">
