@@ -1,6 +1,7 @@
 'use client';
 
-import { useCategory } from '@/context/CategoryContext'; // 1. Import useCategory
+// 1. Import usePathname
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
     ArrowRight,
@@ -15,13 +16,22 @@ import Link from 'next/link';
 import { categoryGroups } from '@/lib/categories';
 
 export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void }) => {
-    const { setCategory } = useCategory(); // 2. Use the context
+    const router = useRouter();
+    // 2. Get the current pathname
+    const pathname = usePathname();
     const currentYear = new Date().getFullYear();
     const { user, logout } = useAuth();
 
-    const handleNavigation = (categorySlug: string | null) => {
-        setCategory(categorySlug); // 3. Use setCategory
+    // 3. Determine the active category from the URL slug
+    const activeCategory = pathname.startsWith('/category/')
+        ? pathname.split('/')[2]
+        : 'all';
+
+    const handleNavigation = (path: string) => {
         onLinkClick?.();
+        setTimeout(() => {
+            router.push(path);
+        }, 150);
     };
 
     const handleLogout = () => {
@@ -29,11 +39,11 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
         onLinkClick?.();
     };
 
-    // ... rest of the component is unchanged
     return (
         <div className="flex flex-col h-full">
             <div className="flex-grow">
                 <div className="p-0">
+                    {/* ... (user authentication section is unchanged) ... */}
                     <div className="pb-4 border-b mb-4 space-y-4">
                         <div className="space-y-4">
                             {user ? (
@@ -80,9 +90,10 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                         </h3>
                         <div className="menu-item">
                             <Button
-                                onClick={() => handleNavigation(null)}
+                                onClick={() => handleNavigation('/')}
                                 className="w-full justify-start"
-                                variant="ghost"
+                                // 4. Apply active state to the "All" button
+                                variant={activeCategory === 'all' ? 'secondary' : 'ghost'}
                             >
                                 <LayoutGrid className="mr-2 h-4 w-4" />
                                 All
@@ -99,8 +110,9 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                                 {group.items.map((item) => (
                                     <div key={item.slug} className="menu-item">
                                         <Button
-                                            variant="ghost"
-                                            onClick={() => handleNavigation(item.slug)}
+                                            // 5. Apply active state to each category button
+                                            variant={activeCategory === item.slug ? 'secondary' : 'ghost'}
+                                            onClick={() => handleNavigation(`/category/${item.slug}`)}
                                             className="w-full justify-start"
                                         >
                                             <item.icon className="mr-2 h-4 w-4" />
@@ -111,6 +123,7 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                             </div>
                         </div>
                     ))}
+                    {/* ... (footer section is unchanged) ... */}
                     <div className="flex mt-4 space-y-2 py-3 px-5 items-center justify-between pt-4 border-t menu-item">
                         <span className="text-sm text-muted-foreground">Switch Theme</span>
                         <ThemeToggle />

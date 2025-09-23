@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useRef, useMemo } from 'react';
-import { useCategory } from '@/context/CategoryContext'; // 1. Import useCategory
 import { getApprovedWebsites, WebsiteData } from '@/services/website';
 import { WebsitesGrid } from './WebsitesGrid';
 import { Spinner } from '@/components/ui/spinner';
@@ -21,19 +20,17 @@ const formatCategoryName = (slug: string | null) => {
     .join(' ');
 };
 
-export function WebsiteList() {
+// The component now accepts an optional category prop
+export function WebsiteList({ category }: { category?: string }) {
   const [websites, setWebsites] = useState<WebsiteData[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalWebsites, setTotalWebsites] = useState(0);
-  const { category } = useCategory(); // 2. Use the context to get the category
   const container = useRef(null);
 
   useEffect(() => {
     const fetchWebsites = async () => {
       setLoading(true);
-      const approvedWebsites = await getApprovedWebsites(
-        category || undefined
-      );
+      const approvedWebsites = await getApprovedWebsites(category);
       setWebsites(approvedWebsites);
 
       if (!category || category === 'all') {
