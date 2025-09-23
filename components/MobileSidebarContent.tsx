@@ -31,9 +31,8 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
 
     return (
         <div className="flex flex-col h-full">
-            <div className="flex-grow overflow-y-auto h-full">
-                <div className="p-4">
-                    {/* MOBILE-ONLY ACCOUNT/SETTINGS BLOCK */}
+            <div className="flex-grow">
+                <div className="p-0">
                     <div className="pb-4 border-b mb-4 space-y-4">
                         <div className="space-y-4">
                             {user ? (
@@ -72,14 +71,8 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                                 </div>
                             )}
                         </div>
-
-                        <div className="flex items-center justify-between pt-4 border-t menu-item">
-                            <span className="text-sm text-muted-foreground">Switch Theme</span>
-                            <ThemeToggle />
-                        </div>
                     </div>
 
-                    {/* DISCOVER */}
                     <div className="space-y-1">
                         <h3 className="mb-2 px-2 text-lg font-semibold tracking-tight menu-item">
                             Discover
@@ -96,7 +89,6 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                         </div>
                     </div>
 
-                    {/* GROUPS */}
                     {categoryGroups.map((group) => (
                         <div key={group.title} className="pt-4">
                             <h4 className="mb-2 px-2 text-sm font-semibold text-muted-foreground menu-item">
@@ -118,11 +110,14 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                             </div>
                         </div>
                     ))}
+                    <div className="flex mt-4 space-y-2 py-3 px-5 items-center justify-between pt-4 border-t menu-item">
+                        <span className="text-sm text-muted-foreground">Switch Theme</span>
+                        <ThemeToggle />
+                    </div>
                 </div>
 
-                {/* FOOTER / PROMO */}
                 <div className="mt-auto pt-4 flex-shrink-0 border-t p-4">
-                    <div className="px-2 space-y-2 text-start menu-item">
+                    <div className="px-0 space-y-2 text-start menu-item">
                         <h4 className="font-semibold text-sm">
                             Need a stunning website or web application?
                         </h4>
