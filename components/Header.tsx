@@ -6,16 +6,8 @@ import { useAuth } from '@/context/AuthContext';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
 import { SignInDialog } from './SignInDialog';
 import { ThemeToggle } from './ThemeToggle';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
-import { SidebarContent } from './SidebarContent';
 import Logo from './Logo';
+import { MobileMenu } from './MobileMenu';
 
 export const Header = () => {
   const { user, logout } = useAuth();
@@ -48,25 +40,7 @@ export const Header = () => {
       </div>
 
       <div className="lg:hidden">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Open menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent
-            side="right"
-            className="w-64 p-4 flex flex-col"
-          >
-            <SheetHeader className="sr-only">
-              <SheetTitle>Menu</SheetTitle>
-            </SheetHeader>
-            <div className="flex-grow overflow-y-auto">
-              <SidebarContent />
-            </div>
-          </SheetContent>
-        </Sheet>
+        <MobileMenu />
       </div>
     </header>
   );
