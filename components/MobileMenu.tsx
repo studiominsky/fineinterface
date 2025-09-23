@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { SidebarContent } from './SidebarContent';
 import Logo from './Logo';
+import { cn } from '@/lib/utils';
 
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
     const searchParams = useSearchParams();
+
     const menuRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const tl = useRef<gsap.core.Timeline | null>(null);
@@ -21,7 +23,7 @@ export function MobileMenu() {
     }, [pathname, searchParams]);
 
     useEffect(() => {
-        gsap.context(() => {
+        const ctx = gsap.context(() => {
             tl.current = gsap.timeline({ paused: true });
 
             tl.current
@@ -34,16 +36,13 @@ export function MobileMenu() {
                     menuRef.current,
                     {
                         x: 0,
-                        duration: 0.3,
-                        ease: 'power2.inOut',
+                        duration: 0.4,
+                        ease: 'power3.out',
                     },
                     '<'
                 );
         });
-
-        return () => {
-            tl.current?.kill();
-        };
+        return () => ctx.revert();
     }, []);
 
     useEffect(() => {
@@ -70,17 +69,17 @@ export function MobileMenu() {
 
             <div
                 ref={overlayRef}
-                className="fixed inset-0 bg-black/60 z-[999] opacity-0"
+                className="fixed inset-0 bg-black/50 z-[99]"
                 onClick={() => setIsOpen(false)}
-                style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+                style={{ opacity: 0, pointerEvents: isOpen ? 'auto' : 'none' }}
             />
 
             <div
                 ref={menuRef}
-                className="fixed top-0 right-0 h-full8 w-74 bg-background z-[1000] p-0 flex flex-col"
+                className="fixed top-0 right-0 h-full w-64 bg-background z-[100] p-5 flex flex-col"
                 style={{ transform: 'translateX(100%)' }}
             >
-                <div className="p-5 py-8 sticky top-0 h-18 border-b bg-background/80 backdrop-blur flex items-center justify-between">
+                <div className="sticky top-0 z-10 h-14 border-b bg-background/80 backdrop-blur flex items-center justify-between">
                     <Logo />
                     <Button
                         aria-label="Close menu"
@@ -93,7 +92,7 @@ export function MobileMenu() {
                     </Button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto pt-4">
                     <SidebarContent onLinkClick={() => setIsOpen(false)} />
                 </div>
             </div>
