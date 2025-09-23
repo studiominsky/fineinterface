@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { gsap } from 'gsap';
 import { Menu, X } from 'lucide-react';
-import { SidebarContent } from './SidebarContent';
 import Logo from './Logo';
 import clsx from 'clsx';
 
@@ -95,7 +94,7 @@ export function MobileMenu() {
                 </div>
 
                 <div className="flex-1 overflow-y-auto pt-4">
-                    <SidebarContent onLinkClick={() => setIsOpen(false)} />
+                    123
                 </div>
             </div>
         </div>
