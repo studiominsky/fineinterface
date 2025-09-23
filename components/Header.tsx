@@ -13,7 +13,7 @@ export const Header = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="fixed top-0 h-20 w-full flex justify-between items-center p-4 border-b bg-background z-[200]">
+    <header className="fixed top-0 h-20 w-full flex justify-between items-center p-4 border-b bg-background">
       <Logo />
 
       <div className="hidden lg:flex items-center gap-2">

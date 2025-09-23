@@ -1,21 +1,12 @@
+// WebsitesGrid.tsx
 'use client';
 
 import Image from 'next/image';
-import {
-  ExternalLink,
-  ImageIcon,
-  MoreVertical,
-  Trash2,
-} from 'lucide-react';
+import { ExternalLink, ImageIcon, MoreVertical, Trash2 } from 'lucide-react';
 import { WebsiteData } from '@/services/website';
 import { WebsiteDetailDialog } from './WebsiteDetailDialog';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export const WebsitesGrid = ({
   websites,
@@ -27,19 +18,12 @@ export const WebsitesGrid = ({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-7">
       {websites.map((site, index) => (
-        <div
-          key={site.id}
-          className="website-card h-full relative group"
-        >
+        <div key={site.id} className="website-card h-full relative group pointer-events-auto will-change-transform">
           {onRemoveWebsite && (
             <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    className="h-7 w-7"
-                  >
+                  <Button variant="secondary" size="icon" className="h-7 w-7">
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -74,27 +58,13 @@ export const WebsitesGrid = ({
                 </div>
               ) : (
                 <div className="relative w-full aspect-video bg-muted flex items-center justify-center">
-                  <ImageIcon
-                    className="text-muted-foreground"
-                    size={48}
-                  />
+                  <ImageIcon className="text-muted-foreground" size={48} />
                 </div>
               )}
               <div className="p-4 flex items-center justify-between gap-2 bg-background">
-                <h3 className="font-semibold text-sm truncate">
-                  {site.title}
-                </h3>
-                <div
-                  className="p-2"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <a
-                    href={site.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Visit ${site.title} website`}
-                    className="flex items-center justify-center"
-                  >
+                <h3 className="font-semibold text-sm truncate">{site.title}</h3>
+                <div className="p-2" onClick={(e) => e.stopPropagation()}>
+                  <a href={site.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${site.title} website`} className="flex items-center justify-center">
                     <ExternalLink className="h-4 w-4 text-muted-foreground" />
                   </a>
                 </div>
