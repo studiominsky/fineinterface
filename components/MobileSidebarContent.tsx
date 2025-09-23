@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useCategory } from '@/context/CategoryContext'; // 1. Import useCategory
 import { Button } from '@/components/ui/button';
 import {
     ArrowRight,
@@ -15,16 +15,13 @@ import Link from 'next/link';
 import { categoryGroups } from '@/lib/categories';
 
 export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void }) => {
-    const router = useRouter();
+    const { setCategory } = useCategory(); // 2. Use the context
     const currentYear = new Date().getFullYear();
     const { user, logout } = useAuth();
 
-    const handleNavigation = (path: string) => {
+    const handleNavigation = (categorySlug: string | null) => {
+        setCategory(categorySlug); // 3. Use setCategory
         onLinkClick?.();
-
-        setTimeout(() => {
-            router.push(path);
-        }, 150);
     };
 
     const handleLogout = () => {
@@ -32,6 +29,7 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
         onLinkClick?.();
     };
 
+    // ... rest of the component is unchanged
     return (
         <div className="flex flex-col h-full">
             <div className="flex-grow">
@@ -82,7 +80,7 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                         </h3>
                         <div className="menu-item">
                             <Button
-                                onClick={() => handleNavigation('/')}
+                                onClick={() => handleNavigation(null)}
                                 className="w-full justify-start"
                                 variant="ghost"
                             >
@@ -102,7 +100,7 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                                     <div key={item.slug} className="menu-item">
                                         <Button
                                             variant="ghost"
-                                            onClick={() => handleNavigation(`/?category=${item.slug}`)}
+                                            onClick={() => handleNavigation(item.slug)}
                                             className="w-full justify-start"
                                         >
                                             <item.icon className="mr-2 h-4 w-4" />

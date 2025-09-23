@@ -1,19 +1,14 @@
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useCategory } from '@/context/CategoryContext'; // 1. Import useCategory
 import { Button } from '@/components/ui/button';
 import { ArrowRight, LayoutGrid } from 'lucide-react';
 import { categoryGroups } from '@/lib/categories';
 
 export const SidebarContent = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const activeCategory = searchParams.get('category') || 'all';
+  const { category, setCategory } = useCategory(); // 2. Use the context
+  const activeCategory = category || 'all';
   const currentYear = new Date().getFullYear();
-
-  const handleNavigation = (path: string) => {
-    router.push(path);
-  };
 
   return (
     <div className="flex flex-col h-full">
@@ -25,7 +20,7 @@ export const SidebarContent = () => {
             </h3>
             <Button
               variant={activeCategory === 'all' ? 'secondary' : 'ghost'}
-              onClick={() => handleNavigation('/')}
+              onClick={() => setCategory(null)} // 3. Use setCategory
               className="w-full justify-start"
             >
               <LayoutGrid className="mr-2 h-4 w-4" />
@@ -45,7 +40,7 @@ export const SidebarContent = () => {
                     variant={
                       activeCategory === item.slug ? 'secondary' : 'ghost'
                     }
-                    onClick={() => handleNavigation(`/?category=${item.slug}`)}
+                    onClick={() => setCategory(item.slug)} // 4. Use setCategory
                     className="w-full justify-start"
                   >
                     <item.icon className="mr-2 h-4 w-4" />

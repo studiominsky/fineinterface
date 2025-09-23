@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useCategory } from '@/context/CategoryContext'; // 1. Import useCategory
 import { getApprovedWebsites, WebsiteData } from '@/services/website';
 import { WebsitesGrid } from './WebsitesGrid';
 import { Spinner } from '@/components/ui/spinner';
@@ -25,8 +25,7 @@ export function WebsiteList() {
   const [websites, setWebsites] = useState<WebsiteData[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalWebsites, setTotalWebsites] = useState(0);
-  const searchParams = useSearchParams();
-  const category = searchParams.get('category');
+  const { category } = useCategory(); // 2. Use the context to get the category
   const container = useRef(null);
 
   useEffect(() => {
@@ -48,6 +47,7 @@ export function WebsiteList() {
     fetchWebsites();
   }, [category]);
 
+  // ... rest of the component is unchanged
   const pageTitle = useMemo(() => {
     if (category && category !== 'all') {
       return `${formatCategoryName(category)} Websites`;

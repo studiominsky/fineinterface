@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { AuthProvider } from '@/context/AuthContext';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { CategoryProvider } from '@/context/CategoryContext'; // 1. Import the provider
 
 import '@/styles/globals.css';
 
@@ -43,7 +44,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            {children}
+            {/* 2. Wrap the children with the CategoryProvider */}
+            <CategoryProvider>
+              {children}
+            </CategoryProvider>
             <Toaster />
           </AuthProvider>
         </ThemeProvider>
