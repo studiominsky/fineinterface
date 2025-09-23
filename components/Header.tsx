@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
 import { SignInDialog } from './SignInDialog';
 import { ThemeToggle } from './ThemeToggle';
-import { MobileMenu } from './MobileMenu'; // Import the new component
+import { MobileMenu } from './MobileMenu';
 import Logo from './Logo';
 
 export const Header = () => {
@@ -40,7 +41,9 @@ export const Header = () => {
       </div>
 
       <div className="lg:hidden">
-        <MobileMenu />
+        <Suspense fallback={<Button variant="ghost" size="icon" className="h-12 w-12" disabled />}>
+          <MobileMenu />
+        </Suspense>
       </div>
     </header>
   );

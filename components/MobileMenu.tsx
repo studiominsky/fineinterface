@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { gsap } from 'gsap';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
@@ -11,13 +11,14 @@ import Logo from './Logo';
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
+    const searchParams = useSearchParams();
     const menuRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const tl = useRef<gsap.core.Timeline | null>(null);
 
     useEffect(() => {
         setIsOpen(false);
-    }, [pathname]);
+    }, [pathname, searchParams]);
 
     useEffect(() => {
         gsap.context(() => {
