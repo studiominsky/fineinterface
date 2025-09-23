@@ -1,4 +1,3 @@
-// app/category/[slug]/page.tsx
 import { Suspense } from 'react';
 import { Header } from '@/components/Header';
 import { CategorySidebar } from '@/components/CategorySidebar';

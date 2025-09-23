@@ -68,7 +68,7 @@ export function MobileMenu() {
     return (
         <>
             <button
-                className="relative z-[1200] flex h-10 w-10 items-center justify-center"
+                className="relative z-[1200] flex h-10 w-10 items-center justify-center cursor-pointer"
                 onClick={() => setIsOpen(true)}
                 aria-label="Open menu"
                 aria-expanded={isOpen}
@@ -96,13 +96,13 @@ export function MobileMenu() {
                             aria-modal="true"
                             aria-hidden={!isOpen}
                         >
-                            <div className="flex-shrink-0 h-20 flex items-center justify-between border-b px-4">
+                            <div className="flex-shrink-0 border-l h-20 flex items-center justify-between border-b px-4">
                                 <Logo />
-                                <button onClick={() => setIsOpen(false)} className="p-2" aria-label="Close menu">
+                                <button onClick={() => setIsOpen(false)} className="p-2  cursor-pointer" aria-label="Close menu">
                                     <X className="h-6 w-6" />
                                 </button>
                             </div>
-                            <div className="flex-1 h-full overflow-y-auto p-4">
+                            <div className="flex-1 h-full border-l overflow-y-auto p-4">
                                 <MobileSidebarContent onLinkClick={() => setIsOpen(false)} />
                             </div>
                         </div>
