@@ -3,11 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { gsap } from 'gsap';
-import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { SidebarContent } from './SidebarContent';
 import Logo from './Logo';
-import { cn } from '@/lib/utils';
+import clsx from 'clsx';
 
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
@@ -57,15 +56,27 @@ export function MobileMenu() {
 
     return (
         <div className="lg:hidden">
-            <Button
-                aria-label="Open menu"
-                variant="ghost"
-                size="icon"
-                className="h-12 w-12"
-                onClick={() => setIsOpen(true)}
+            <button
+                className="relative z-[101] flex h-8 w-8 cursor-pointer items-center justify-center"
+                onClick={() => setIsOpen((v) => !v)}
+                aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={isOpen}
+                aria-controls="mobile-menu-panel"
+                style={{ touchAction: 'manipulation' }}
             >
-                <Menu className="h-7 w-7" />
-            </Button>
+                <Menu
+                    className={clsx(
+                        'absolute h-6 w-6 transition-all duration-300 ease-out',
+                        isOpen ? 'rotate-45 opacity-0' : 'rotate-0 opacity-100'
+                    )}
+                />
+                <X
+                    className={clsx(
+                        'absolute h-6 w-6 transition-all duration-300 ease-out',
+                        isOpen ? 'rotate-0 opacity-100' : '-rotate-45 opacity-0'
+                    )}
+                />
+            </button>
 
             <div
                 ref={overlayRef}
@@ -76,20 +87,11 @@ export function MobileMenu() {
 
             <div
                 ref={menuRef}
-                className="fixed top-0 right-0 h-full w-64 bg-background z-[100] p-5 flex flex-col"
+                className="fixed top-0 right-0 h-full w-84 bg-background z-[100] p-5 flex flex-col"
                 style={{ transform: 'translateX(100%)' }}
             >
-                <div className="sticky top-0 z-10 h-14 border-b bg-background/80 backdrop-blur flex items-center justify-between">
+                <div className="sticky top-0 z-10 h-12 bg-background/80 backdrop-blur flex items-center justify-between">
                     <Logo />
-                    <Button
-                        aria-label="Close menu"
-                        variant="ghost"
-                        size="icon"
-                        className="h-12 w-12"
-                        onClick={() => setIsOpen(false)}
-                    >
-                        <X className="h-7 w-7" />
-                    </Button>
                 </div>
 
                 <div className="flex-1 overflow-y-auto pt-4">
