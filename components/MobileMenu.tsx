@@ -67,7 +67,7 @@ export function MobileMenu() {
         <div ref={rootRef} className="lg:hidden">
             <button
                 className="relative z-[101] flex h-8 w-8 items-center justify-center"
-                onClick={() => setIsOpen(v => !v)}
+                onPointerDown={() => setIsOpen(v => !v)}
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isOpen}
                 aria-controls="mobile-menu-panel"
