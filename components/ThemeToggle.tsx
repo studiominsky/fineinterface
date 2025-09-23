@@ -7,7 +7,7 @@ import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -23,7 +23,7 @@ export function ThemeToggle() {
   }
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
   };
 
   return (
@@ -32,7 +32,7 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       className="w-24 justify-start gap-2"
     >
-      {theme === 'light' ? (
+      {resolvedTheme === 'light' ? (
         <>
           <Moon className="size-4" />
           <span>Dark</span>

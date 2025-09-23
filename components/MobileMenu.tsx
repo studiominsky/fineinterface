@@ -53,7 +53,7 @@ export function MobileMenu() {
         <div className="lg:hidden">
             <button
                 className="relative z-[101] flex h-8 w-8 items-center justify-center"
-                onPointerDown={() => setIsOpen((v) => !v)} // snappier than onClick on iOS
+                onPointerDown={() => setIsOpen((v) => !v)}
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isOpen}
                 aria-controls="mobile-menu-panel"
@@ -83,7 +83,7 @@ export function MobileMenu() {
             <div
                 id="mobile-menu-panel"
                 ref={menuRef}
-                className="fixed top-0 right-0 z-[100] h-full w-84 bg-background p-5 flex flex-col will-change-transform"
+                className="fixed top-0 right-0 z-[100] h-full w-74 bg-background p-5 flex flex-col will-change-transform"
             >
                 <div className="sticky top-0 z-10 h-12 bg-background/80 flex items-center justify-between">
                     <Logo />
