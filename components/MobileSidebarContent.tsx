@@ -17,12 +17,10 @@ import { categoryGroups } from '@/lib/categories';
 
 export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void }) => {
     const router = useRouter();
-    // 2. Get the current pathname
     const pathname = usePathname();
     const currentYear = new Date().getFullYear();
     const { user, logout } = useAuth();
 
-    // 3. Determine the active category from the URL slug
     const activeCategory = pathname.startsWith('/category/')
         ? pathname.split('/')[2]
         : 'all';
@@ -43,7 +41,6 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
         <div className="flex flex-col h-full">
             <div className="flex-grow">
                 <div className="p-0">
-                    {/* ... (user authentication section is unchanged) ... */}
                     <div className="pb-4 border-b mb-4 space-y-4">
                         <div className="space-y-4">
                             {user ? (
@@ -92,7 +89,6 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                             <Button
                                 onClick={() => handleNavigation('/')}
                                 className="w-full justify-start"
-                                // 4. Apply active state to the "All" button
                                 variant={activeCategory === 'all' ? 'secondary' : 'ghost'}
                             >
                                 <LayoutGrid className="mr-2 h-4 w-4" />
@@ -110,8 +106,9 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                                 {group.items.map((item) => (
                                     <div key={item.slug} className="menu-item">
                                         <Button
-                                            // 5. Apply active state to each category button
+                                            // 5. Apply active state
                                             variant={activeCategory === item.slug ? 'secondary' : 'ghost'}
+                                            // 6. Update navigation path
                                             onClick={() => handleNavigation(`/category/${item.slug}`)}
                                             className="w-full justify-start"
                                         >
@@ -123,7 +120,6 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                             </div>
                         </div>
                     ))}
-                    {/* ... (footer section is unchanged) ... */}
                     <div className="flex mt-4 space-y-2 py-3 px-5 items-center justify-between pt-4 border-t menu-item">
                         <span className="text-sm text-muted-foreground">Switch Theme</span>
                         <ThemeToggle />

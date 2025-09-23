@@ -9,7 +9,6 @@ export const SidebarContent = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Determine the active category from the pathname
   const activeCategory = pathname.startsWith('/category/')
     ? pathname.split('/')[2]
     : 'all';
