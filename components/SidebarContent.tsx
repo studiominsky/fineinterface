@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Archive,
@@ -65,8 +65,6 @@ export const SidebarContent = ({
   onLinkClick?: () => void;
 }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const activeCategory = searchParams.get('category') || 'all';
   const currentYear = new Date().getFullYear();
   const { user, logout } = useAuth();
 
@@ -130,9 +128,9 @@ export const SidebarContent = ({
               Discover
             </h3>
             <Button
-              variant={activeCategory === 'all' ? 'secondary' : 'ghost'}
               onClick={() => handleNavigation('/')}
               className="w-full justify-start"
+              variant='ghost'
             >
               <LayoutGrid className="mr-2 h-4 w-4" />
               All
@@ -148,9 +146,7 @@ export const SidebarContent = ({
                 {group.items.map((item) => (
                   <Button
                     key={item.slug}
-                    variant={
-                      activeCategory === item.slug ? 'secondary' : 'ghost'
-                    }
+                    variant='ghost'
                     onClick={() => handleNavigation(`/?category=${item.slug}`)}
                     className="w-full justify-start"
                   >
@@ -177,6 +173,7 @@ export const SidebarContent = ({
               rel="noopener noreferrer"
             >
               <Button
+                variant='ghost'
                 size="sm"
                 className="bg-[#34c477] text-black hover:bg-[#2bab67] w-full text-xs h-8"
               >
