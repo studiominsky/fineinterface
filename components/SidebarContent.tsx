@@ -77,8 +77,8 @@ export const SidebarContent = ({ onLinkClick }: { onLinkClick?: () => void }) =>
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-grow overflow-y-auto">
-        <div className="p-4">
+      <div className="flex-grow ">
+        <div className="p-4 overflow-y-auto h-full">
           {/* MOBILE-ONLY ACCOUNT/SETTINGS BLOCK */}
           <div className="pb-4 border-b mb-4 space-y-4 lg:hidden">
             <div className="space-y-4">

@@ -116,7 +116,7 @@ export function MobileMenu() {
                     <Logo />
                 </div>
 
-                <div className="flex-1 overflow-y-auto pt-4">
+                <div className="flex-1 overflow-y-auto pt-4 h-full">
                     <SidebarContent onLinkClick={() => setIsOpen(false)} />
                 </div>
             </div>

@@ -7,10 +7,7 @@ import Loading from '@/components/Loading';
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      <Suspense fallback={null}>
-        <Header />
-      </Suspense>
-
+      <Header />
       <div className="flex flex-1">
         <Suspense fallback={<Loading />}>
           <CategorySidebar />
