@@ -6,7 +6,7 @@ import { gsap } from 'gsap';
 import { Menu, X } from 'lucide-react';
 import clsx from 'clsx';
 import Logo from './Logo';
-import { MobileSidebarContent } from './MobileSidebarContent'; // <-- Import the new component
+import { MobileSidebarContent } from './MobileSidebarContent';
 
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
@@ -17,17 +17,14 @@ export function MobileMenu() {
     const overlayRef = useRef<HTMLDivElement>(null);
     const tlRef = useRef<gsap.core.Timeline | null>(null);
 
-    // Close on route changes
     useEffect(() => setIsOpen(false), [pathname]);
 
-    // Build GSAP timeline once
     useEffect(() => {
         const ctx = gsap.context(() => {
             const panel = panelRef.current;
             const overlay = overlayRef.current;
-            const menuItems = gsap.utils.toArray('.menu-item');
 
-            if (!panel || !overlay || menuItems.length === 0) return;
+            if (!panel || !overlay) return;
 
             tlRef.current = gsap.timeline({
                 paused: true,
@@ -41,23 +38,13 @@ export function MobileMenu() {
                     document.documentElement.style.overflow = '';
                 },
             })
-                .to(overlay, { autoAlpha: 1, duration: 0.3 })
-                .to(panel, { xPercent: -100, autoAlpha: 1, duration: 0.4 }, 0)
-                .fromTo(menuItems, {
-                    opacity: 0,
-                    x: -20,
-                }, {
-                    opacity: 1,
-                    x: 0,
-                    duration: 0.3,
-                    stagger: 0.05,
-                }, 0.1);
+                .to(overlay, { autoAlpha: 1, duration: 0.25 })
+                .to(panel, { xPercent: -100, autoAlpha: 1, duration: 0.3 }, 0);
         }, rootRef);
 
         return () => ctx.revert();
-    }, [isOpen]); // Re-run if isOpen changes to get the menu items
+    }, []);
 
-    // Open/close animation + scroll lock
     useEffect(() => {
         const tl = tlRef.current;
         if (!tl) return;
@@ -120,8 +107,7 @@ export function MobileMenu() {
                     <Logo />
                 </div>
 
-                <div className="flex-1 overflow-y-auto pt-4">
-                    {/* Use the new mobile-specific content component */}
+                <div className="flex-1 overflow-y-auto h-full pt-4">
                     <MobileSidebarContent onLinkClick={() => setIsOpen(false)} />
                 </div>
             </div>

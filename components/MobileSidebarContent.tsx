@@ -3,20 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
-    Archive,
     ArrowRight,
-    BrainCircuit,
-    Briefcase,
-    Building2,
-    Code,
-    Cpu,
-    Globe,
-    Landmark,
     LayoutGrid,
-    Megaphone,
-    PenTool,
-    ShoppingCart,
-    Target,
     LogIn,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -43,7 +31,7 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
 
     return (
         <div className="flex flex-col h-full">
-            <div className="flex-grow overflow-y-auto">
+            <div className="flex-grow overflow-y-auto h-full">
                 <div className="p-4">
                     {/* MOBILE-ONLY ACCOUNT/SETTINGS BLOCK */}
                     <div className="pb-4 border-b mb-4 space-y-4">
@@ -69,7 +57,7 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                                     </div>
                                 </div>
                             ) : (
-                                <div className="text-start space-y-2 pt-[30px]">
+                                <div className="text-start space-y-2 pt-[10px]">
                                     <p className="text-sm text-muted-foreground menu-item">
                                         Sign in to submit sites and save your favorites.
                                     </p>
