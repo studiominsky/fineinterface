@@ -11,7 +11,13 @@ import { DocumentSnapshot } from 'firebase/firestore';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const getPageLimit = () => (window.innerWidth < 768 ? 9 : 12);
+const getPageLimit = () => {
+  if (typeof window !== 'undefined') {
+    if (window.innerWidth < 560) return 4;
+    if (window.innerWidth < 768) return 9;
+  }
+  return 12;
+};
 
 export function WebsiteList({ category }: { category?: string }) {
   const [websites, setWebsites] = useState<WebsiteData[]>([]);
