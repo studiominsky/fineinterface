@@ -1,27 +1,22 @@
+// MobileSidebarContent.tsx
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, LayoutGrid, LogIn } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
 import { SignInDialog } from './SignInDialog';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
-import Link from 'next/link';
 import { categoryGroups } from '@/lib/categories';
 
 export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void }) => {
-    const router = useRouter();
     const pathname = usePathname();
     const currentYear = new Date().getFullYear();
     const { user, logout } = useAuth();
 
     const activeCategory = pathname.startsWith('/category/') ? pathname.split('/')[2] : 'all';
-
-    const handleNavigation = (path: string) => {
-        router.push(path);
-        onLinkClick?.();
-    };
 
     const handleLogout = () => {
         logout();
@@ -39,15 +34,11 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                                     <div className="menu-item">
                                         <UploadWebsiteDialog />
                                     </div>
-                                    <Link href="/profile" onClick={onLinkClick} className="menu-item block">
-                                        <Button variant="ghost" className="w-full justify-start">
-                                            Profile
-                                        </Button>
+                                    <Link href="/profile" prefetch onClick={onLinkClick} className="menu-item block">
+                                        <Button variant="ghost" className="w-full justify-start">Profile</Button>
                                     </Link>
                                     <div className="menu-item">
-                                        <Button variant="ghost" onClick={handleLogout} className="w-full justify-start">
-                                            Logout
-                                        </Button>
+                                        <Button variant="ghost" onClick={handleLogout} className="w-full justify-start">Logout</Button>
                                     </div>
                                 </div>
                             ) : (
@@ -68,12 +59,14 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
 
                     <div className="space-y-1">
                         <h3 className="mb-2 px-2 text-lg font-semibold tracking-tight menu-item">Discover</h3>
-                        <div className="menu-item">
-                            <Button onClick={() => handleNavigation('/')} className="w-full justify-start" variant={activeCategory === 'all' ? 'secondary' : 'ghost'}>
-                                <LayoutGrid className="mr-2 h-4 w-4" />
-                                All
+                        <Link href="/" prefetch onClick={onLinkClick} className="menu-item block">
+                            <Button className="w-full justify-start" variant={activeCategory === 'all' ? 'secondary' : 'ghost'} asChild>
+                                <span>
+                                    <LayoutGrid className="mr-2 h-4 w-4" />
+                                    All
+                                </span>
                             </Button>
-                        </div>
+                        </Link>
                     </div>
 
                     {categoryGroups.map((group) => (
@@ -81,16 +74,24 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                             <h4 className="mb-2 px-2 text-sm font-semibold text-muted-foreground menu-item">{group.title}</h4>
                             <div className="space-y-1">
                                 {group.items.map((item) => (
-                                    <div key={item.slug} className="menu-item">
-                                        <Link href={`/category/${item.slug}`} onClick={onLinkClick} className="menu-item block">
-                                            <Button variant={activeCategory === item.slug ? 'secondary' : 'ghost'} className="w-full justify-start" asChild>
-                                                <span>
-                                                    <item.icon className="mr-2 h-4 w-4" />
-                                                    {item.name}
-                                                </span>
-                                            </Button>
-                                        </Link>
-                                    </div>
+                                    <Link
+                                        key={item.slug}
+                                        href={`/category/${item.slug}`}
+                                        prefetch
+                                        onClick={onLinkClick}
+                                        className="menu-item block"
+                                    >
+                                        <Button
+                                            variant={activeCategory === item.slug ? 'secondary' : 'ghost'}
+                                            className="w-full justify-start"
+                                            asChild
+                                        >
+                                            <span>
+                                                <item.icon className="mr-2 h-4 w-4" />
+                                                {item.name}
+                                            </span>
+                                        </Button>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
