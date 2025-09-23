@@ -1,12 +1,24 @@
 import { Header } from '@/components/Header';
 import HomePageClient from '@/components/HomePageClient';
+import { CategoryHeader } from '@/components/CategoryHeader';
+import { getTotalApprovedWebsites } from '@/services/website';
+import { Suspense } from 'react';
+import Loading from '@/components/Loading';
+import { WebsiteList } from '@/components/WebsiteList';
 
-export default function Home() {
+export default async function Home() {
+  const totalWebsites = await getTotalApprovedWebsites();
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <div className="flex flex-1">
-        <HomePageClient />
+        <HomePageClient>
+          <CategoryHeader totalWebsites={totalWebsites} />
+
+          <WebsiteList />
+
+        </HomePageClient>
       </div>
     </div>
   );

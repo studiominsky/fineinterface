@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
-import { Header } from '@/components/Header';
-import { CategorySidebar } from '@/components/CategorySidebar';
 import { WebsiteList } from '@/components/WebsiteList';
 import Loading from '@/components/Loading';
+import { CategoryHeader } from '@/components/CategoryHeader';
+import { getTotalApprovedWebsites } from '@/services/website';
 
 export default async function CategoryPage({
     params,
@@ -10,18 +10,14 @@ export default async function CategoryPage({
     params: Promise<{ slug: string }>
 }) {
     const { slug } = await params;
+    const totalWebsites = await getTotalApprovedWebsites(slug);
 
     return (
-        <div className="flex min-h-screen flex-col">
-            <Header />
-            <div className="flex flex-1">
-                <Suspense fallback={<Loading />}>
-                    <CategorySidebar />
-                    <main className="flex-1 bg-[#fcfcfc] dark:bg-black min-h-screen">
-                        <WebsiteList category={slug} />
-                    </main>
-                </Suspense>
-            </div>
-        </div>
+        <>
+            <CategoryHeader category={slug} totalWebsites={totalWebsites} />
+            <Suspense fallback={<Loading />}>
+                <WebsiteList category={slug} />
+            </Suspense>
+        </>
     );
 }

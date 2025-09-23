@@ -9,6 +9,11 @@ import {
   QueryConstraint,
   updateDoc,
   where,
+  orderBy,
+  limit,
+  startAfter,
+  DocumentSnapshot,
+  getCountFromServer,
 } from 'firebase/firestore';
 import {
   deleteObject,
@@ -84,25 +89,50 @@ export const addWebsite = async (
 };
 
 export const getApprovedWebsites = async (
-  category?: string
-): Promise<WebsiteData[]> => {
-  const queryConstraints: QueryConstraint[] = [
+  category?: string,
+  startAfterDoc?: DocumentSnapshot | null
+): Promise<{ websites: WebsiteData[]; lastVisible: DocumentSnapshot | null; total: number }> => {
+  const constraints: QueryConstraint[] = [
     where('approved', '==', true),
   ];
 
   if (category && category !== 'all') {
-    queryConstraints.push(
-      where('categories', 'array-contains', category)
-    );
+    constraints.push(where('categories', 'array-contains', category));
   }
 
-  const q = query(collection(db, 'websites'), ...queryConstraints);
-  const snapshot = await getDocs(q);
+  const q = query(collection(db, 'websites'), ...constraints);
+  const totalSnapshot = await getCountFromServer(q);
+  const total = totalSnapshot.data().count;
 
-  return snapshot.docs.map(
+  const paginatedConstraints = [...constraints, orderBy('createdAt', 'desc'), limit(12)];
+
+  if (startAfterDoc) {
+    paginatedConstraints.push(startAfter(startAfterDoc));
+  }
+
+  const paginatedQuery = query(collection(db, 'websites'), ...paginatedConstraints);
+  const snapshot = await getDocs(paginatedQuery);
+
+  const websites = snapshot.docs.map(
     (doc) => ({ id: doc.id, ...doc.data() } as WebsiteData)
   );
+  const lastVisible = snapshot.docs[snapshot.docs.length - 1] || null;
+
+  return { websites, lastVisible, total };
 };
+
+export const getTotalApprovedWebsites = async (category?: string): Promise<number> => {
+  const constraints: QueryConstraint[] = [where('approved', '==', true)];
+
+  if (category && category !== 'all') {
+    constraints.push(where('categories', 'array-contains', category));
+  }
+
+  const q = query(collection(db, 'websites'), ...constraints);
+  const snapshot = await getCountFromServer(q);
+  return snapshot.data().count;
+};
+
 
 export const getUnapprovedWebsites = async (): Promise<
   WebsiteData[]

@@ -1,17 +1,15 @@
 'use client';
 
-import { Suspense } from 'react';
 import { CategorySidebar } from '@/components/CategorySidebar';
-import { WebsiteList } from '@/components/WebsiteList';
-import Loading from '@/components/Loading';
+import React from 'react';
 
-export default function HomePageClient({ category }: { category?: string }) {
+export default function HomePageClient({ children }: { children: React.ReactNode }) {
     return (
-        <Suspense fallback={<Loading />}>
+        <>
             <CategorySidebar />
             <main className="flex-1 bg-[#fcfcfc] dark:bg-black min-h-screen">
-                <WebsiteList category={category} />
+                {children}
             </main>
-        </Suspense>
+        </>
     );
 }
