@@ -34,15 +34,17 @@ export function MobileMenu() {
                 onStart: () => {
                     gsap.set([panel, overlay], { display: 'block' });
                 },
-
                 onReverseComplete: () => {
                     gsap.set([panel, overlay], { display: 'none' });
                     document.body.style.overflow = '';
                     document.documentElement.style.overflow = '';
                 },
             })
+                .set(panel, { xPercent: 100, autoAlpha: 0 })
+                .set(overlay, { autoAlpha: 0 })
                 .to(overlay, { autoAlpha: 1, duration: 0.25 })
-                .to(panel, { xPercent: -100, autoAlpha: 1, duration: 0.3 }, 0);
+                .to(panel, { xPercent: 0, autoAlpha: 1, duration: 0.3 }, 0);
+
         }, rootRef);
 
         return () => ctx.revert();
@@ -73,7 +75,7 @@ export function MobileMenu() {
                     'relative z-50 flex h-8 w-8 items-center justify-center transition-opacity',
                     { 'opacity-0 pointer-events-none': isOpen }
                 )}
-                onPointerDown={() => setIsOpen(true)}
+                onClick={() => setIsOpen(true)}
                 aria-label="Open menu"
                 aria-expanded={isOpen}
                 aria-controls="mobile-menu-panel"
@@ -94,7 +96,7 @@ export function MobileMenu() {
             <div
                 id="mobile-menu-panel"
                 ref={panelRef}
-                className="fixed top-0 right-0 z-[100] hidden h-full w-80 max-w-[85vw] translate-x-full flex-col bg-background opacity-0"
+                className="fixed top-0 right-0 z-[110] hidden h-full w-80 max-w-[85vw] flex-col bg-background opacity-0"
                 role="dialog"
                 aria-modal="true"
                 aria-hidden={!isOpen}
@@ -114,6 +116,6 @@ export function MobileMenu() {
                     <MobileSidebarContent onLinkClick={() => setIsOpen(false)} />
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

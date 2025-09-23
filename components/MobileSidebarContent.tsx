@@ -27,9 +27,7 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
 
     const handleNavigation = (path: string) => {
         onLinkClick?.();
-        setTimeout(() => {
-            router.push(path);
-        }, 150);
+        router.push(path);
     };
 
     const handleLogout = () => {
@@ -105,16 +103,14 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
                             <div className="space-y-1">
                                 {group.items.map((item) => (
                                     <div key={item.slug} className="menu-item">
-                                        <Button
-                                            // 5. Apply active state
-                                            variant={activeCategory === item.slug ? 'secondary' : 'ghost'}
-                                            // 6. Update navigation path
-                                            onClick={() => handleNavigation(`/category/${item.slug}`)}
-                                            className="w-full justify-start"
-                                        >
-                                            <item.icon className="mr-2 h-4 w-4" />
-                                            {item.name}
-                                        </Button>
+                                        <Link href={`/category/${item.slug}`} onClick={onLinkClick} className="menu-item block">
+                                            <Button variant={activeCategory === item.slug ? 'secondary' : 'ghost'} className="w-full justify-start" asChild>
+                                                <span>
+                                                    <item.icon className="mr-2 h-4 w-4" />
+                                                    {item.name}
+                                                </span>
+                                            </Button>
+                                        </Link>
                                     </div>
                                 ))}
                             </div>
