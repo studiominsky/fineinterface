@@ -1,13 +1,16 @@
 import { Suspense } from 'react';
 import { Header } from '@/components/Header';
-import { CategorySidebar } from '@/components/CategorySidebar'; // This component contains SidebarContent
+import { CategorySidebar } from '@/components/CategorySidebar';
 import { WebsiteList } from '@/components/WebsiteList';
 import Loading from '@/components/Loading';
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      <Header />
+      <Suspense fallback={null}>
+        <Header />
+      </Suspense>
+
       <div className="flex flex-1">
         <Suspense fallback={<Loading />}>
           <CategorySidebar />
