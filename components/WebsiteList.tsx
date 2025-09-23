@@ -20,7 +20,6 @@ const formatCategoryName = (slug: string | null) => {
     .join(' ');
 };
 
-// The component now accepts an optional category prop
 export function WebsiteList({ category }: { category?: string }) {
   const [websites, setWebsites] = useState<WebsiteData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +43,6 @@ export function WebsiteList({ category }: { category?: string }) {
     fetchWebsites();
   }, [category]);
 
-  // ... rest of the component is unchanged
   const pageTitle = useMemo(() => {
     if (category && category !== 'all') {
       return `${formatCategoryName(category)} Websites`;
