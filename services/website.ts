@@ -10,7 +10,7 @@ import {
   updateDoc,
   where,
   orderBy,
-  limit,
+  limit as firestoreLimit,
   startAfter,
   DocumentSnapshot,
   getCountFromServer,
@@ -90,7 +90,8 @@ export const addWebsite = async (
 
 export const getApprovedWebsites = async (
   category?: string,
-  startAfterDoc?: DocumentSnapshot | null
+  startAfterDoc?: DocumentSnapshot | null,
+  pageLimit: number = 12
 ): Promise<{ websites: WebsiteData[]; lastVisible: DocumentSnapshot | null; total: number }> => {
   const constraints: QueryConstraint[] = [
     where('approved', '==', true),
@@ -104,7 +105,7 @@ export const getApprovedWebsites = async (
   const totalSnapshot = await getCountFromServer(q);
   const total = totalSnapshot.data().count;
 
-  const paginatedConstraints = [...constraints, orderBy('createdAt', 'desc'), limit(12)];
+  const paginatedConstraints = [...constraints, orderBy('createdAt', 'desc'), firestoreLimit(pageLimit)];
 
   if (startAfterDoc) {
     paginatedConstraints.push(startAfter(startAfterDoc));

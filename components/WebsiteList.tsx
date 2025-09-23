@@ -11,6 +11,8 @@ import { DocumentSnapshot } from 'firebase/firestore';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const getPageLimit = () => (window.innerWidth < 768 ? 9 : 12);
+
 export function WebsiteList({ category }: { category?: string }) {
   const [websites, setWebsites] = useState<WebsiteData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -18,8 +20,16 @@ export function WebsiteList({ category }: { category?: string }) {
   const [lastVisible, setLastVisible] = useState<DocumentSnapshot | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [totalWebsites, setTotalWebsites] = useState(0);
+  const [pageLimit, setPageLimit] = useState(12);
   const container = useRef<HTMLDivElement | null>(null);
   const loader = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const updateLimit = () => setPageLimit(getPageLimit());
+    updateLimit();
+    window.addEventListener('resize', updateLimit);
+    return () => window.removeEventListener('resize', updateLimit);
+  }, []);
 
   const fetchWebsites = useCallback(async (startAfterDoc: DocumentSnapshot | null = null) => {
     if (loadingMore) return;
@@ -30,7 +40,7 @@ export function WebsiteList({ category }: { category?: string }) {
       setLoading(true);
     }
 
-    const { websites: newWebsites, lastVisible: newLastVisible, total } = await getApprovedWebsites(category, startAfterDoc);
+    const { websites: newWebsites, lastVisible: newLastVisible, total } = await getApprovedWebsites(category, startAfterDoc, pageLimit);
 
     setWebsites(prev => startAfterDoc ? [...prev, ...newWebsites] : newWebsites);
     setLastVisible(newLastVisible);
@@ -39,24 +49,15 @@ export function WebsiteList({ category }: { category?: string }) {
 
     setLoading(false);
     setLoadingMore(false);
-  }, [category, loadingMore, websites.length]);
+  }, [category, loadingMore, websites.length, pageLimit]);
 
   useEffect(() => {
     setWebsites([]);
     setLastVisible(null);
     setHasMore(true);
-    const initialFetch = async () => {
-      setLoading(true);
-      const { websites: newWebsites, lastVisible: newLastVisible, total } = await getApprovedWebsites(category);
-      setWebsites(newWebsites);
-      setLastVisible(newLastVisible);
-      setTotalWebsites(total);
-      setHasMore(newWebsites.length < total);
-      setLoading(false);
-    };
-    initialFetch();
-  }, [category]);
-
+    fetchWebsites();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, pageLimit]);
 
   useGSAP(
     () => {
@@ -108,7 +109,7 @@ export function WebsiteList({ category }: { category?: string }) {
   if (loading && websites.length === 0) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-7">
-        {Array.from({ length: 9 }).map((_, i) => (
+        {Array.from({ length: pageLimit }).map((_, i) => (
           <div
             key={i}
             className="flex flex-col border border-border rounded-md"
