@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { UploadWebsiteDialog } from './UploadWebsiteDialog';
@@ -41,9 +40,7 @@ export const Header = () => {
       </div>
 
       <div className="lg:hidden">
-        <Suspense fallback={<Button variant="ghost" size="icon" className="h-12 w-12" disabled />}>
-          <MobileMenu />
-        </Suspense>
+        <MobileMenu />
       </div>
     </header>
   );

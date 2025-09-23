@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { gsap } from 'gsap';
 import { Menu, X } from 'lucide-react';
+import { SidebarContent } from './SidebarContent';
 import Logo from './Logo';
 import clsx from 'clsx';
 
@@ -22,33 +23,28 @@ export function MobileMenu() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            tl.current = gsap.timeline({ paused: true });
+            if (!menuRef.current || !overlayRef.current) return;
 
-            tl.current
-                .to(overlayRef.current, {
-                    opacity: 1,
-                    duration: 0.3,
-                    ease: 'power2.inOut',
-                })
-                .to(
-                    menuRef.current,
-                    {
-                        x: 0,
-                        duration: 0.4,
-                        ease: 'power3.out',
-                    },
-                    '<'
-                );
+            gsap.set(menuRef.current, { xPercent: 100, willChange: 'transform' });
+            gsap.set(overlayRef.current, { opacity: 0, willChange: 'opacity' });
+
+            tl.current = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } })
+                .to(overlayRef.current, { opacity: 1, duration: 0.25 }, 0)
+                .to(menuRef.current, { xPercent: 0, duration: 0.35, force3D: true }, 0);
         });
+
         return () => ctx.revert();
     }, []);
 
     useEffect(() => {
+        const t = tl.current;
+        if (!t) return;
+
         if (isOpen) {
-            tl.current?.play();
+            t.play();
             document.body.style.overflow = 'hidden';
         } else {
-            tl.current?.reverse();
+            t.reverse();
             document.body.style.overflow = '';
         }
     }, [isOpen]);
@@ -56,8 +52,8 @@ export function MobileMenu() {
     return (
         <div className="lg:hidden">
             <button
-                className="relative z-[101] flex h-8 w-8 cursor-pointer items-center justify-center"
-                onClick={() => setIsOpen((v) => !v)}
+                className="relative z-[101] flex h-8 w-8 items-center justify-center"
+                onPointerDown={() => setIsOpen((v) => !v)} // snappier than onClick on iOS
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isOpen}
                 aria-controls="mobile-menu-panel"
@@ -79,22 +75,22 @@ export function MobileMenu() {
 
             <div
                 ref={overlayRef}
-                className="fixed inset-0 bg-black/50 z-[99]"
+                className="fixed inset-0 z-[99] bg-black/50"
                 onClick={() => setIsOpen(false)}
-                style={{ opacity: 0, pointerEvents: isOpen ? 'auto' : 'none' }}
+                style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
             />
 
             <div
+                id="mobile-menu-panel"
                 ref={menuRef}
-                className="fixed top-0 right-0 h-full w-84 bg-background z-[100] p-5 flex flex-col"
-                style={{ transform: 'translateX(100%)' }}
+                className="fixed top-0 right-0 z-[100] h-full w-84 bg-background p-5 flex flex-col will-change-transform"
             >
-                <div className="sticky top-0 z-10 h-12 bg-background/80 backdrop-blur flex items-center justify-between">
+                <div className="sticky top-0 z-10 h-12 bg-background/80 flex items-center justify-between">
                     <Logo />
                 </div>
 
                 <div className="flex-1 overflow-y-auto pt-4">
-                    123
+                    <SidebarContent onLinkClick={() => setIsOpen(false)} />
                 </div>
             </div>
         </div>
