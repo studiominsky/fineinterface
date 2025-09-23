@@ -17,15 +17,12 @@ export function MobileMenu() {
     const overlayRef = useRef<HTMLDivElement>(null);
     const tlRef = useRef<gsap.core.Timeline | null>(null);
 
-    // Close on route changes
     useEffect(() => setIsOpen(false), [pathname]);
 
-    // Build GSAP timeline once
     useEffect(() => {
         const ctx = gsap.context(() => {
             const panel = panelRef.current;
             const overlay = overlayRef.current;
-            // Select all elements inside the panel that should be animated
             const menuItems = gsap.utils.toArray('.menu-item');
 
             if (!panel || !overlay || menuItems.length === 0) return;
@@ -39,35 +36,41 @@ export function MobileMenu() {
                 onReverseComplete: () => {
                     gsap.set([panel, overlay], { display: 'none' });
                     document.body.style.overflow = '';
+                    document.documentElement.style.overflow = '';
                 },
             })
-                .to(overlay, { autoAlpha: 1, duration: 0.1 })
-                .to(panel, { xPercent: -100, autoAlpha: 1, duration: 0.1 }, 0)
+                .to(overlay, { autoAlpha: 1, duration: 0.3 })
+                .to(panel, { xPercent: -100, autoAlpha: 1, duration: 0.4 }, 0)
                 .fromTo(menuItems, {
                     opacity: 0,
                     x: -20,
                 }, {
                     opacity: 1,
                     x: 0,
-                    duration: 0.1,
-                    stagger: 0.01,
-                }, 0.01); // Stagger in items shortly after panel starts moving
+                    duration: 0.3,
+                    stagger: 0.05,
+                }, 0.1);
         }, rootRef);
 
         return () => ctx.revert();
     }, []);
 
-    // Open/close animation + scroll lock
     useEffect(() => {
         const tl = tlRef.current;
         if (!tl) return;
+
         if (isOpen) {
             document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
             tl.play(0);
         } else {
             tl.reverse();
         }
-        return () => { document.body.style.overflow = ''; };
+
+        return () => {
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        };
     }, [isOpen]);
 
     return (
@@ -94,7 +97,6 @@ export function MobileMenu() {
                 />
             </button>
 
-            {/* Overlay */}
             <div
                 ref={overlayRef}
                 className="fixed inset-0 z-[99] hidden bg-black/30 backdrop-blur-sm opacity-0"
@@ -103,7 +105,6 @@ export function MobileMenu() {
                 aria-hidden={!isOpen}
             />
 
-            {/* Panel */}
             <div
                 id="mobile-menu-panel"
                 ref={panelRef}
@@ -116,7 +117,7 @@ export function MobileMenu() {
                     <Logo />
                 </div>
 
-                <div className="flex-1 overflow-y-auto pt-4 h-full">
+                <div className="flex-1 overflow-y-auto pt-4">
                     <SidebarContent onLinkClick={() => setIsOpen(false)} />
                 </div>
             </div>
