@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { gsap } from 'gsap';
 import { Menu, X } from 'lucide-react';
 import { SidebarContent } from './SidebarContent';
@@ -11,7 +11,7 @@ import clsx from 'clsx';
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
-    const searchParams = useSearchParams();
+
 
     const menuRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
@@ -19,7 +19,7 @@ export function MobileMenu() {
 
     useEffect(() => {
         setIsOpen(false);
-    }, [pathname, searchParams]);
+    }, [pathname]);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
