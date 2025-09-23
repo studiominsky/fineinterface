@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import { getApprovedWebsites, WebsiteData } from '@/services/website';
 import { WebsitesGrid } from './WebsitesGrid';
 import { Spinner } from '@/components/ui/spinner';
+
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -58,30 +59,26 @@ export function WebsiteList({ category }: { category?: string }) {
     return 'Explore our hand-picked collection of exceptional websites. A go-to resource for designers, developers, and creatives seeking inspiration.';
   }, [category]);
 
-  useGSAP(
-    () => {
-      if (!loading && websites.length > 0) {
-        gsap.fromTo(
-          '.website-card',
-          {
-            opacity: 0,
-            y: 50,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: 'back.out(1.7)',
-            stagger: 0.1,
-            scrollTrigger: {
-              trigger: container.current,
-              start: 'top 85%',
-              once: true,
-            },
-          }
-        );
+  useGSAP(() => {
+    if (loading || websites.length === 0) return;
+
+    gsap.fromTo(
+      '.website-card',
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: 'back.out(1.7)',
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: container.current,
+          start: 'top 85%',
+          once: true,
+        },
       }
-    },
+    );
+  },
     { scope: container, dependencies: [websites, loading] }
   );
 
