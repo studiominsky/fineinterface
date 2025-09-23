@@ -69,7 +69,7 @@ const WebsiteCard = ({ site, index, onRemoveWebsite }: { site: WebsiteData; inde
             <div className="relative w-full aspect-video ">
               <Image
                 src={site.screenshotUrl}
-                alt={site.title}
+                alt={`${site.title} website photo`}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
@@ -81,10 +81,10 @@ const WebsiteCard = ({ site, index, onRemoveWebsite }: { site: WebsiteData; inde
               <ImageIcon className="text-muted-foreground" size={48} />
             </div>
           )}
-          <div className="p-4 flex items-center justify-between gap-2 bg-background">
-            <h3 className="font-semibold text-sm truncate">{site.title}</h3>
+          <div className="px-4 py-1 flex items-center justify-between gap-2 bg-background">
+            <h2 className="font-semibold text-sm truncate">{site.title}</h2>
             <div className="p-2" onClick={(e) => e.stopPropagation()}>
-              <a href={site.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${site.title} website`} className="flex items-center justify-center">
+              <a href={site.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${site.title} website`} className="flex p-3 items-center justify-center">
                 <ExternalLink className="h-4 w-4 text-muted-foreground" />
               </a>
             </div>

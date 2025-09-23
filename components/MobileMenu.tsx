@@ -86,7 +86,6 @@ export function MobileMenu() {
                             className="fixed inset-0 z-[1000] hidden bg-black/30 backdrop-blur-sm opacity-0"
                             onClick={() => setIsOpen(false)}
                             style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
-                            aria-hidden={!isOpen}
                         />
                         <div
                             id="mobile-menu-panel"
@@ -94,7 +93,6 @@ export function MobileMenu() {
                             className="fixed top-0 right-0 z-[1010] hidden h-full w-80 max-w-[85vw] flex-col bg-background opacity-0"
                             role="dialog"
                             aria-modal="true"
-                            aria-hidden={!isOpen}
                         >
                             <div className="flex-shrink-0 border-l h-20 flex items-center justify-between border-b px-4">
                                 <Logo />
