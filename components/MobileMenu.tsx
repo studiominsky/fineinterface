@@ -10,6 +10,7 @@ import { MobileSidebarContent } from './MobileSidebarContent';
 
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isInteractable, setIsInteractable] = useState(false);
     const pathname = usePathname();
 
     const rootRef = useRef<HTMLDivElement>(null);
@@ -31,6 +32,9 @@ export function MobileMenu() {
                 defaults: { ease: 'power2.out' },
                 onStart: () => {
                     gsap.set([panel, overlay], { display: 'block' });
+                },
+                onComplete: () => {
+                    setIsInteractable(true);
                 },
                 onReverseComplete: () => {
                     gsap.set([panel, overlay], { display: 'none' });
@@ -54,6 +58,7 @@ export function MobileMenu() {
             document.documentElement.style.overflow = 'hidden';
             tl.play(0);
         } else {
+            setIsInteractable(false);
             tl.reverse();
         }
 
@@ -102,6 +107,7 @@ export function MobileMenu() {
                 role="dialog"
                 aria-modal="true"
                 aria-hidden={!isOpen}
+                style={{ pointerEvents: isInteractable ? 'auto' : 'none' }}
             >
                 <div className="sticky top-0 z-10 h-12 flex items-center justify-between bg-background/80">
                     <Logo />
