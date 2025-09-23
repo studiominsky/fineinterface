@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { gsap } from 'gsap';
 import { Menu, X } from 'lucide-react';
 import clsx from 'clsx';
@@ -11,7 +11,6 @@ import { MobileSidebarContent } from './MobileSidebarContent';
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
-    const searchParams = useSearchParams();
 
     const rootRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
@@ -19,8 +18,8 @@ export function MobileMenu() {
     const tlRef = useRef<gsap.core.Timeline | null>(null);
 
     useEffect(() => {
-        setIsOpen(false);
-    }, [pathname, searchParams]);
+        setIsOpen(false)
+    }, [pathname]);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -111,7 +110,7 @@ export function MobileMenu() {
                     </button>
                 </div>
 
-                <div className="flex-1 h-full overflow-y-auto p-4">
+                <div className="flex-1 overflow-y-auto p-4">
                     <MobileSidebarContent onLinkClick={() => setIsOpen(false)} />
                 </div>
             </div>

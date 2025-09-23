@@ -1,6 +1,5 @@
 'use client';
 
-import { Suspense } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
@@ -41,9 +40,7 @@ export const Header = () => {
       </div>
 
       <div className="lg:hidden">
-        <Suspense fallback={null}>
-          <MobileMenu />
-        </Suspense>
+        <MobileMenu />
       </div>
     </header>
   );
