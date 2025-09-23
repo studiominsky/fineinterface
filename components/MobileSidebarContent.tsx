@@ -20,7 +20,11 @@ export const MobileSidebarContent = ({ onLinkClick }: { onLinkClick?: () => void
     const { user, logout } = useAuth();
 
     const handleNavigation = (path: string) => {
-        router.push(path);
+        onLinkClick?.();
+
+        setTimeout(() => {
+            router.push(path);
+        }, 150);
     };
 
     const handleLogout = () => {
