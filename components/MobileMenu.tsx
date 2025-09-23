@@ -1,59 +1,80 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { gsap } from 'gsap';
 import { Menu, X } from 'lucide-react';
-import { SidebarContent } from './SidebarContent';
-import Logo from './Logo';
 import clsx from 'clsx';
+import Logo from './Logo';
+import { SidebarContent } from './SidebarContent';
 
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
 
-
-    const menuRef = useRef<HTMLDivElement>(null);
+    const rootRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
-    const tl = useRef<gsap.core.Timeline | null>(null);
+    const tlRef = useRef<gsap.core.Timeline | null>(null);
 
-    useEffect(() => {
-        setIsOpen(false);
-    }, [pathname]);
+    // Close on route changes
+    useEffect(() => setIsOpen(false), [pathname]);
 
+    // Build GSAP timeline once
     useEffect(() => {
         const ctx = gsap.context(() => {
-            if (!menuRef.current || !overlayRef.current) return;
+            const panel = panelRef.current;
+            const overlay = overlayRef.current;
+            // Select all elements inside the panel that should be animated
+            const menuItems = gsap.utils.toArray('.menu-item');
 
-            gsap.set(menuRef.current, { xPercent: 100, willChange: 'transform' });
-            gsap.set(overlayRef.current, { opacity: 0, willChange: 'opacity' });
+            if (!panel || !overlay || menuItems.length === 0) return;
 
-            tl.current = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } })
-                .to(overlayRef.current, { opacity: 1, duration: 0.25 }, 0)
-                .to(menuRef.current, { xPercent: 0, duration: 0.35, force3D: true }, 0);
-        });
+            tlRef.current = gsap.timeline({
+                paused: true,
+                defaults: { ease: 'power2.out' },
+                onStart: () => {
+                    gsap.set([panel, overlay], { display: 'block' });
+                },
+                onReverseComplete: () => {
+                    gsap.set([panel, overlay], { display: 'none' });
+                    document.body.style.overflow = '';
+                },
+            })
+                .to(overlay, { autoAlpha: 1, duration: 0.1 })
+                .to(panel, { xPercent: -100, autoAlpha: 1, duration: 0.1 }, 0)
+                .fromTo(menuItems, {
+                    opacity: 0,
+                    x: -20,
+                }, {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.1,
+                    stagger: 0.01,
+                }, 0.01); // Stagger in items shortly after panel starts moving
+        }, rootRef);
 
         return () => ctx.revert();
     }, []);
 
+    // Open/close animation + scroll lock
     useEffect(() => {
-        const t = tl.current;
-        if (!t) return;
-
+        const tl = tlRef.current;
+        if (!tl) return;
         if (isOpen) {
-            t.play();
             document.body.style.overflow = 'hidden';
+            tl.play(0);
         } else {
-            t.reverse();
-            document.body.style.overflow = '';
+            tl.reverse();
         }
+        return () => { document.body.style.overflow = ''; };
     }, [isOpen]);
 
     return (
-        <div className="lg:hidden">
+        <div ref={rootRef} className="lg:hidden">
             <button
                 className="relative z-[101] flex h-8 w-8 items-center justify-center"
-                onPointerDown={() => setIsOpen((v) => !v)}
+                onPointerDown={() => setIsOpen(v => !v)}
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isOpen}
                 aria-controls="mobile-menu-panel"
@@ -73,19 +94,25 @@ export function MobileMenu() {
                 />
             </button>
 
+            {/* Overlay */}
             <div
                 ref={overlayRef}
-                className="fixed inset-0 z-[99] bg-black/50"
+                className="fixed inset-0 z-[99] hidden bg-black/30 backdrop-blur-sm opacity-0"
                 onClick={() => setIsOpen(false)}
                 style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+                aria-hidden={!isOpen}
             />
 
+            {/* Panel */}
             <div
                 id="mobile-menu-panel"
-                ref={menuRef}
-                className="fixed top-0 right-0 z-[100] h-full w-74 bg-background p-5 flex flex-col will-change-transform"
+                ref={panelRef}
+                className="fixed top-0 right-0 z-[100] hidden h-full w-80 max-w-[85vw] translate-x-full flex-col bg-background p-5 opacity-0"
+                role="dialog"
+                aria-modal="true"
+                aria-hidden={!isOpen}
             >
-                <div className="sticky top-0 z-10 h-12 bg-background/80 flex items-center justify-between">
+                <div className="sticky top-0 z-10 h-12 flex items-center justify-between bg-background/80">
                     <Logo />
                 </div>
 
