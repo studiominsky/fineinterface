@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { gsap } from 'gsap';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
@@ -11,14 +11,13 @@ import Logo from './Logo';
 export function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
-    const searchParams = useSearchParams();
     const menuRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const tl = useRef<gsap.core.Timeline | null>(null);
 
     useEffect(() => {
         setIsOpen(false);
-    }, [pathname, searchParams]);
+    }, [pathname]);
 
     useEffect(() => {
         gsap.context(() => {
@@ -77,10 +76,10 @@ export function MobileMenu() {
 
             <div
                 ref={menuRef}
-                className="fixed top-0 right-0 h-full w-64 bg-background z-[1000] p-0 flex flex-col"
+                className="fixed top-0 right-0 h-full8 w-74 bg-background z-[1000] p-0 flex flex-col"
                 style={{ transform: 'translateX(100%)' }}
             >
-                <div className="p-5 sticky top-0 h-14 border-b bg-background/80 backdrop-blur flex items-center justify-between">
+                <div className="p-5 py-8 sticky top-0 h-18 border-b bg-background/80 backdrop-blur flex items-center justify-between">
                     <Logo />
                     <Button
                         aria-label="Close menu"
