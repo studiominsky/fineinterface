@@ -66,7 +66,7 @@ const WebsiteCard = ({ site, index, onRemoveWebsite }: { site: WebsiteData; inde
       <WebsiteDetailDialog website={site}>
         <button className="overflow-hidden transition-all flex flex-col cursor-pointer h-full border border-border rounded-md duration-300 hover:-translate-y-2 w-full text-left">
           {site.screenshotUrl ? (
-            <div className="relative w-full aspect-video ">
+            <div className="relative w-full aspect-video">
               <Image
                 src={site.screenshotUrl}
                 alt={`${site.title} website photo`}
@@ -81,7 +81,7 @@ const WebsiteCard = ({ site, index, onRemoveWebsite }: { site: WebsiteData; inde
               <ImageIcon className="text-muted-foreground" size={48} />
             </div>
           )}
-          <div className="px-4 py-1 flex items-center justify-between gap-2 bg-background">
+          <div className="px-4 py-1 flex items-center justify-between gap-2 bg-background w-full">
             <h2 className="font-semibold text-sm truncate">{site.title}</h2>
             <div className="p-2" onClick={(e) => e.stopPropagation()}>
               <a href={site.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${site.title} website`} className="flex p-3 items-center justify-center">

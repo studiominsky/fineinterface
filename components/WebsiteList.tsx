@@ -99,7 +99,10 @@ export function WebsiteList({ category }: { category?: string }) {
           fetchWebsites(lastVisible);
         }
       },
-      { threshold: 1.0 }
+      {
+        threshold: 0.1,
+        rootMargin: '200px',
+      }
     );
 
     const loaderElement = loader.current;
