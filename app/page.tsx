@@ -13,9 +13,7 @@ export default async function Home() {
       <div className="flex flex-1">
         <HomePageClient>
           <CategoryHeader totalWebsites={totalWebsites} />
-
           <WebsiteList />
-
         </HomePageClient>
       </div>
     </div>
