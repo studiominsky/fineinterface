@@ -1,9 +1,9 @@
+export const runtime = 'edge';
+
 import { Header } from '@/components/Header';
 import HomePageClient from '@/components/HomePageClient';
 import { CategoryHeader } from '@/components/CategoryHeader';
 import { getTotalApprovedWebsites } from '@/services/website';
-import { Suspense } from 'react';
-import Loading from '@/components/Loading';
 import { WebsiteList } from '@/components/WebsiteList';
 
 export default async function Home() {
