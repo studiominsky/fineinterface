@@ -1,4 +1,4 @@
-export const runtime = 'edge';
+
 
 import { Suspense } from 'react';
 import { WebsiteList } from '@/components/WebsiteList';
